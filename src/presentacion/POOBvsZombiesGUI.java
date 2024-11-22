@@ -34,7 +34,7 @@ public class POOBvsZombiesGUI extends JFrame {
 
     private void prepareMenu() {
         // Reproducción de música
-        playBackgroundMusic("C:\\Users\\adm\\Desktop\\POOBvsZombies\\POOB\\src\\musica\\menu_theme.wav");
+        playBackgroundMusic("C:\\Users\\camia\\Documents\\ProyectoPoob\\ProyectoFinal\\src\\musica\\menu_theme.wav");
 
         // Panel principal
         JPanel contentPane = new JPanel();
@@ -43,7 +43,7 @@ public class POOBvsZombiesGUI extends JFrame {
         setContentPane(contentPane);
 
         // Imagen superior
-        ImageIcon icon = new ImageIcon("C:\\Users\\adm\\Desktop\\POOBvsZombies\\POOB\\src\\Imagenes\\Menu_proyecto.png");
+        ImageIcon icon = new ImageIcon("C:\\Users\\camia\\Documents\\ProyectoPoob\\ProyectoFinal\\src\\Imagenes\\Menu_proyecto.png");
         JLabel imageLabel = new JLabel(icon);
         contentPane.add(imageLabel, BorderLayout.NORTH); // Imagen arriba
 
@@ -245,7 +245,7 @@ public class POOBvsZombiesGUI extends JFrame {
     // Alternar música según el estado del JCheckBox
     private void toggleMusic(boolean playMusic) {
         if (playMusic) {
-            playBackgroundMusic("C:\\Users\\adm\\Desktop\\POOBvsZombies\\POOB\\src\\musica\\menu_theme.wav");
+            playBackgroundMusic("C:\\Users\\camia\\Documents\\ProyectoPoob\\ProyectoFinal\\src\\musica\\menu_theme.wav");
         } else {
             stopBackgroundMusic();
         }
