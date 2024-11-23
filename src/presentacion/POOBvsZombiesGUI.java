@@ -1,6 +1,7 @@
 package presentacion;
 
 import javax.sound.sampled.*;
+import java.io.InputStream;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.*;
@@ -34,7 +35,7 @@ public class POOBvsZombiesGUI extends JFrame {
 
     private void prepareMenu() {
         // Reproducción de música
-        playBackgroundMusic("C:\\Users\\camia\\Documents\\ProyectoPoob\\ProyectoFinal\\src\\musica\\menu_theme.wav");
+        playBackgroundMusic("/musica/menu_theme.wav");
 
         // Panel principal
         JPanel contentPane = new JPanel();
@@ -43,7 +44,7 @@ public class POOBvsZombiesGUI extends JFrame {
         setContentPane(contentPane);
 
         // Imagen superior
-        ImageIcon icon = new ImageIcon("C:\\Users\\camia\\Documents\\ProyectoPoob\\ProyectoFinal\\src\\Imagenes\\Menu_proyecto.png");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/Menu_proyecto.png"));
         JLabel imageLabel = new JLabel(icon);
         contentPane.add(imageLabel, BorderLayout.NORTH); // Imagen arriba
 
@@ -82,16 +83,19 @@ public class POOBvsZombiesGUI extends JFrame {
         buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         buttonsPanel.setBackground(new Color(8, 105, 14));
 
+
         // Botón "Salir"
         exitButton = new JButton("Salir");
         exitButton.setBackground(new Color(127, 121, 172));
         exitButton.setForeground(new Color(48, 228, 30));
+        exitButton.setFont(new Font("Arial", Font.BOLD, 14));
         buttonsPanel.add(exitButton);
 
         // Botón "Jugar"
         playButton = new JButton("Jugar");
         playButton.setBackground(new Color(127, 121, 172));
         playButton.setForeground(new Color(48, 228, 30));
+        playButton.setFont(new Font("Arial", Font.BOLD, 14));
         buttonsPanel.add(playButton);
 
         menuPanel.add(buttonsPanel);
@@ -107,6 +111,7 @@ public class POOBvsZombiesGUI extends JFrame {
         settingsButton = new JButton("Configuración");
         settingsButton.setBackground(new Color(127, 121, 172));
         settingsButton.setForeground(new Color(48, 228, 30));
+        settingsButton.setFont(new Font("Arial", Font.BOLD, 14));
         settingsButton.addActionListener(e -> showSettingsDialog());
         bottomPanel.add(settingsButton);
 
@@ -181,33 +186,45 @@ public class POOBvsZombiesGUI extends JFrame {
         settingsDialog.setLayout(new BorderLayout());
         settingsDialog.setSize(300, 200);
         settingsDialog.setLocationRelativeTo(this);
+        settingsDialog.getContentPane().setBackground(new Color(8, 105, 14));
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        contentPanel.setBackground(new Color(73, 67, 77));
+
 
         // Control para activar/desactivar música
-        JCheckBox musicCheckBox = new JCheckBox("Activar música");
+        JCheckBox musicCheckBox = new JCheckBox("ACTIVAR MUSICA");
         musicCheckBox.setSelected(isMusicPlaying); // Estado actual
+        musicCheckBox.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar fuente
+        musicCheckBox.setForeground(new Color(127, 121, 172)); // Texto claro
+        musicCheckBox.setBackground(new Color(73, 67, 77)); // Fondo oscuro
         musicCheckBox.addActionListener(e -> toggleMusic(musicCheckBox.isSelected()));
 
-        // Control de tamaño de ventana
-        JLabel sizeLabel = new JLabel("Tamaño de ventana:");
-        JComboBox<String> sizeComboBox = new JComboBox<>(new String[]{
-                "Pequeño", "Mediano", "Grande"
-        });
-        sizeComboBox.addActionListener(e -> adjustWindowSize((String) sizeComboBox.getSelectedItem()));
+        // Control para pantalla completa
+        JCheckBox fullScreenCheckBox = new JCheckBox("PANTALLA COMPLETA");
+        fullScreenCheckBox.setSelected(getExtendedState() == JFrame.MAXIMIZED_BOTH);
+        fullScreenCheckBox.setFont(new Font("Arial", Font.BOLD, 14));
+        fullScreenCheckBox.setForeground(new Color(127, 121, 172));
+        fullScreenCheckBox.setBackground(new Color(73, 67, 77));
+        fullScreenCheckBox.addActionListener(e -> toggleFullScreen(fullScreenCheckBox.isSelected()));
 
+        // Agregar componentes al panel de contenido
         contentPanel.add(musicCheckBox);
         contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        contentPanel.add(sizeLabel);
-        contentPanel.add(sizeComboBox);
+        contentPanel.add(fullScreenCheckBox);
 
         settingsDialog.add(contentPanel, BorderLayout.CENTER);
 
         // Botón para cerrar el diálogo
-        JButton closeButton = new JButton("Cerrar");
+        JButton closeButton = new JButton("ACEPTAR");
+        closeButton.setFont(new Font("Arial", Font.BOLD, 14));
+        closeButton.setForeground(new Color(48, 228, 30));
+        closeButton.setBackground(new Color(127, 121, 172));
+        closeButton.setFocusPainted(false);
         closeButton.addActionListener(e -> settingsDialog.dispose());
+
         settingsDialog.add(closeButton, BorderLayout.SOUTH);
 
         settingsDialog.setVisible(true);
@@ -217,15 +234,22 @@ public class POOBvsZombiesGUI extends JFrame {
     private Clip clip;
     private boolean isMusicPlaying = false;
 
-    // Reproducir música de fondo
-    public void playBackgroundMusic(String filePath) {
+    public void playBackgroundMusic(String resourcePath) {
         try {
-            File audioFile = new File(filePath);
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+            // Obtén el recurso como InputStream desde el classpath
+            InputStream audioSrc = getClass().getResourceAsStream(resourcePath);
+            if (audioSrc == null) {
+                System.err.println("Error: No se encontró el recurso: " + resourcePath);
+                return;
+            }
 
+            // Carga el InputStream en un AudioInputStream
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioSrc);
+
+            // Configura y reproduce el audio
             clip = AudioSystem.getClip();
             clip.open(audioStream);
-            clip.loop(Clip.LOOP_CONTINUOUSLY); // Repetir continuamente
+            clip.loop(Clip.LOOP_CONTINUOUSLY); // Reproducir en bucle
             clip.start();
             isMusicPlaying = true;
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
@@ -245,26 +269,27 @@ public class POOBvsZombiesGUI extends JFrame {
     // Alternar música según el estado del JCheckBox
     private void toggleMusic(boolean playMusic) {
         if (playMusic) {
-            playBackgroundMusic("C:\\Users\\camia\\Documents\\ProyectoPoob\\ProyectoFinal\\src\\musica\\menu_theme.wav");
+            playBackgroundMusic("/musica/menu_theme.wav");
         } else {
             stopBackgroundMusic();
         }
     }
 
-    // Ajustar tamaño de ventana
-    private void adjustWindowSize(String size) {
-        switch (size) {
-            case "Pequeño":
-                setSize(800, 600);
-                break;
-            case "Mediano":
-                setSize(1024, 768);
-                break;
-            case "Grande":
-                setSize(1920, 1080);
-                break;
+    // Alternar pantalla completa
+    private void toggleFullScreen(boolean fullScreen) {
+        if (fullScreen) {
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+            dispose();
+            setUndecorated(true);
+            setVisible(true);
+        } else {
+            dispose();
+            setUndecorated(false);
+            setSize(1024, 768);
+            setExtendedState(JFrame.NORMAL);
+            setVisible(true);
+            setLocationRelativeTo(null);
         }
-        setLocationRelativeTo(null); // Centrar ventana
     }
 
     public static void main(String[] args) {
