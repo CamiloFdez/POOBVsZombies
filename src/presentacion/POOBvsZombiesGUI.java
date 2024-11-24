@@ -35,7 +35,7 @@ public class POOBvsZombiesGUI extends JFrame {
 
     private void prepareMenu() {
         // Reproducción de música
-        playBackgroundMusic("/musica/menu_theme.wav");
+        playBackgroundMusic("/musica/menuTheme.wav");
 
         // Panel principal
         JPanel contentPane = new JPanel();
@@ -43,12 +43,19 @@ public class POOBvsZombiesGUI extends JFrame {
         contentPane.setBackground(new Color(8, 105, 14));
         setContentPane(contentPane);
 
+        // Imagen de fondo
+        JLabel BackImageLabel = new JLabel();
+        ImageIcon MenuBackground = new ImageIcon(getClass().getResource("/Imagenes/MENU.png")); // Ruta relativa
+        BackImageLabel.setIcon(MenuBackground);
+        BackImageLabel.setHorizontalAlignment(SwingConstants.CENTER); // Centrar la imagen
+        contentPane.add(BackImageLabel, BorderLayout.CENTER);
+
         // Imagen superior
         ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/Menu_proyecto.png"));
         JLabel imageLabel = new JLabel(icon);
         contentPane.add(imageLabel, BorderLayout.NORTH); // Imagen arriba
 
-        // Panel lateral derecho (Menú)
+        //** Panel lateral derecho (Menú)
         menuPanel = new JPanel();
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
         menuPanel.setBackground(new Color(8, 105, 14));
@@ -152,7 +159,9 @@ public class POOBvsZombiesGUI extends JFrame {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("El juego ha comenzado");
+                POOBvsZombiesTablero tablero = new POOBvsZombiesTablero(clip);
+                tablero.setVisible(true);
+                ((JFrame) SwingUtilities.getWindowAncestor(playButton)).dispose();
             }
         });
 
@@ -269,7 +278,7 @@ public class POOBvsZombiesGUI extends JFrame {
     // Alternar música según el estado del JCheckBox
     private void toggleMusic(boolean playMusic) {
         if (playMusic) {
-            playBackgroundMusic("/musica/menu_theme.wav");
+            playBackgroundMusic("/musica/menuTheme.wav");
         } else {
             stopBackgroundMusic();
         }
