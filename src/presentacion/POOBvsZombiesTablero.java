@@ -114,15 +114,15 @@ public class POOBvsZombiesTablero extends JFrame {
                 ImageIcon originalIcon = new ImageIcon(imageUrl);
 
                 // Escalar la imagen al tamaño deseado (ejemplo: 70x70 píxeles)
-                int buttonSize = 70; // Tamaño de los botones
+                int buttonSize = 70;
                 Image scaledImage = originalIcon.getImage().getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH);
                 ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
                 JButton button = new JButton(scaledIcon);
                 button.setPreferredSize(new Dimension(buttonSize, buttonSize)); // Establecer tamaño fijo
-                button.setContentAreaFilled(false); // Sin fondo
-                button.setBorderPainted(false);     // Sin bordes
-                button.setFocusPainted(false);     // Sin efecto de selección
+                button.setContentAreaFilled(false); 
+                button.setBorderPainted(false);
+                button.setFocusPainted(false);
 
                 // Agregar un listener para manejar la acción del botón
                 button.setActionCommand(actionCommand);
