@@ -1,8 +1,5 @@
 package dominio;
 
-/**
- * Representa un tipo específico de planta disparadora: el Lanzaguisantes (Peashooter).
- */
 public class Guisante extends PlantaDisparadora {
     public static final int COST = 100;
 

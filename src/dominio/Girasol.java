@@ -8,7 +8,7 @@ public class Girasol extends PlantaPasiva {
     private int sunPointsGenerated;
 
     public Girasol() {
-        super("Sunflower", 300);
+        super("Girasol", 300);
         this.sunPointsGenerated = 0;
     }
 

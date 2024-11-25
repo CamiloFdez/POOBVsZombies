@@ -5,7 +5,7 @@ package dominio;
  */
 public abstract class PlantaDisparadora extends Planta {
     private int damage;
-    private double shootInterval; // Intervalo de disparo en segundos
+    private double shootInterval;
 
     public PlantaDisparadora(String name, int health, int damage, double shootInterval) {
         super(name, health);
