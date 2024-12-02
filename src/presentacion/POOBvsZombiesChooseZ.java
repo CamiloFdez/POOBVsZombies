@@ -11,16 +11,14 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-
-public class POOBvsZombiesChoosePlants extends JFrame {
+public class POOBvsZombiesChooseZ extends JFrame {
     private JLabel Menu;
     private Clip musicClip;
     private JButton playButton;
     private JButton menuButton;
 
 
-    public POOBvsZombiesChoosePlants(Clip currentMusic) {
+    public POOBvsZombiesChooseZ(Clip currentMusic){
         super("POOBvsZombies");
         // Pausar la música actual
         if (currentMusic != null && currentMusic.isRunning()) {
@@ -45,7 +43,7 @@ public class POOBvsZombiesChoosePlants extends JFrame {
         layeredPane.setBackground(new Color(111, 64, 48));
 
         // JLabel para el texto
-        JLabel titleLabel = new JLabel("ELIGE TUS PLANTAS!", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("ELIGE TUS ZOMBIES!", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 32));
         titleLabel.setForeground(new Color(219, 195, 54));
         titleLabel.setBackground(new Color(111, 64, 48));
@@ -61,10 +59,9 @@ public class POOBvsZombiesChoosePlants extends JFrame {
 
 
         // Añadir botones con imágenes
-        addImageButton(buttonPanel, "/Imagenes/Cgirasol.png", "Acción 1");
-        addImageButton(buttonPanel, "/Imagenes/Cguisante.png", "Acción 2");
-        addImageButton(buttonPanel, "/Imagenes/Cpapa.png", "Acción 3");
-        addImageButton(buttonPanel, "/Imagenes/Cpatata.png", "Accion 4");
+        addImageButton(buttonPanel, "/Imagenes/zombie.png", "Acción 1");
+        addImageButton(buttonPanel, "/Imagenes/zombieCono.png", "Acción 2");
+        addImageButton(buttonPanel, "/Imagenes/zombieBalde.png", "Acción 3");
 
         // Panel para el boton de jugar y volver al menu
         JPanel botPanel = new JPanel();
@@ -181,7 +178,7 @@ public class POOBvsZombiesChoosePlants extends JFrame {
                 button.putClientProperty("illuminated", false);
                 selectedButtons.remove(actionCommand);
             } else {
-                button.setBackground(new Color(219, 195, 54)); // Color iluminado
+                button.setBackground(new Color(9, 9, 9)); // Color iluminado
                 button.putClientProperty("illuminated", true);
                 selectedButtons.add(actionCommand);
             }
@@ -191,5 +188,5 @@ public class POOBvsZombiesChoosePlants extends JFrame {
         // Añadir el botón al panel
         panel.add(button);
     }
-
 }
+

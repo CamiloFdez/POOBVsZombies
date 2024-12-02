@@ -95,8 +95,13 @@ public class POOBvsZombiesTablero extends JFrame {
                 addImageButton(buttonPanel, "/Imagenes/guisante.png", "Acción 2");
             } else if (selectedPlants.get(i).equals("Acción 3")) {
                 addImageButton(buttonPanel, "/Imagenes/papa.png", "Acción 3");
+            } else if (selectedPlants.get(i).equals("Accion 4")) {
+                addImageButton(buttonPanel, "/Imagenes/patata.png", "Accion 4");
             }
         }
+        // Añadir pala al panel
+        addImageButton(buttonPanel, "/Imagenes/pala.png", "Acción 6");
+
 
         // Añadir el panel de botones a una capa superior
         layeredPane.add(buttonPanel, JLayeredPane.PALETTE_LAYER);
