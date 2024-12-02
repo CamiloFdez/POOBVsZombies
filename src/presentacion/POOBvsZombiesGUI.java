@@ -17,6 +17,7 @@ public class POOBvsZombiesGUI extends JFrame {
     private JButton exitButton;
     private JButton playButton;
     private JButton settingsButton;
+    private Clip musicClip;
 
     public POOBvsZombiesGUI() {
         super("POOBvsZombies");
@@ -115,6 +116,7 @@ public class POOBvsZombiesGUI extends JFrame {
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         bottomPanel.setBackground(new Color(8, 105, 14));
 
+        // Botón configuración
         settingsButton = new JButton("Configuración");
         settingsButton.setBackground(new Color(127, 121, 172));
         settingsButton.setForeground(new Color(48, 228, 30));
@@ -159,7 +161,7 @@ public class POOBvsZombiesGUI extends JFrame {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                POOBvsZombiesTablero tablero = new POOBvsZombiesTablero(clip);
+                POOBvsZombiesChoosePlants tablero = new POOBvsZombiesChoosePlants(clip);
                 tablero.setVisible(true);
                 ((JFrame) SwingUtilities.getWindowAncestor(playButton)).dispose();
             }
@@ -276,7 +278,7 @@ public class POOBvsZombiesGUI extends JFrame {
     }
 
     // Alternar música según el estado del JCheckBox
-    private void toggleMusic(boolean playMusic) {
+    public void toggleMusic(boolean playMusic) {
         if (playMusic) {
             playBackgroundMusic("/musica/menuTheme.wav");
         } else {
@@ -285,7 +287,7 @@ public class POOBvsZombiesGUI extends JFrame {
     }
 
     // Alternar pantalla completa
-    private void toggleFullScreen(boolean fullScreen) {
+    public void toggleFullScreen(boolean fullScreen) {
         if (fullScreen) {
             setExtendedState(JFrame.MAXIMIZED_BOTH);
             dispose();
