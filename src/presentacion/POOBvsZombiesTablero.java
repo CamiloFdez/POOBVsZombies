@@ -71,12 +71,16 @@ public class POOBvsZombiesTablero extends JFrame {
         buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT,10,10)); // Alinear a la izquierda
         buttonPanel.setOpaque(false); // Hacer transparente
         buttonPanel.setBounds(0, 0, getWidth(), 70); // Posición en la parte superior
+        buttonPanel.setBackground(new Color(111, 64, 48));
 
         // Panel para el boton de pausa
         JPanel pausePanel = new JPanel();
         pausePanel.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10)); // Alinear a la izquierda
         pausePanel.setOpaque(false); // Hacer transparente
         pausePanel.setBounds(-10, 0, getWidth(), 70); // Posición en la parte superior
+
+        // Añadir pala al panel
+        addImageButton(pausePanel, "/Imagenes/pala.png", "Acción 6");
 
         // Boton "pausa"
         pauseButton = new JButton("Pausa");
@@ -99,8 +103,7 @@ public class POOBvsZombiesTablero extends JFrame {
                 addImageButton(buttonPanel, "/Imagenes/patata.png", "Accion 4");
             }
         }
-        // Añadir pala al panel
-        addImageButton(buttonPanel, "/Imagenes/pala.png", "Acción 6");
+
 
 
         // Añadir el panel de botones a una capa superior
@@ -266,13 +269,13 @@ public class POOBvsZombiesTablero extends JFrame {
                 ImageIcon originalIcon = new ImageIcon(imageUrl);
 
                 // Escalar la imagen al tamaño deseado (ejemplo: 70x70 píxeles)
-                int buttonSize = 70;
+                int buttonSize = 67;
                 Image scaledImage = originalIcon.getImage().getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH);
                 ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
                 JButton button = new JButton(scaledIcon);
                 button.setPreferredSize(new Dimension(buttonSize, buttonSize)); // Establecer tamaño fijo
-                button.setContentAreaFilled(false); 
+                button.setContentAreaFilled(false);
                 button.setBorderPainted(false);
                 button.setFocusPainted(false);
 
@@ -286,6 +289,7 @@ public class POOBvsZombiesTablero extends JFrame {
                 });
 
                 // Añadir el botón al panel
+                button.setBounds(500, 500, buttonSize, buttonSize);
                 panel.add(button);
             } else {
                 System.err.println("No se encontró la imagen: " + imagePath);
@@ -345,6 +349,7 @@ public class POOBvsZombiesTablero extends JFrame {
             e.printStackTrace();
         }
     }
+
 
     // Detener música de fondo
     private void stopBackgroundMusic() {

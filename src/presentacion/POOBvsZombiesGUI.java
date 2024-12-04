@@ -13,7 +13,7 @@ public class POOBvsZombiesGUI extends JFrame {
 
     // Atributos
     private JPanel menuPanel;
-    private JComboBox<String> modalidadComboBox, modoJuegoComboBox, dificultadComboBox;
+    private JComboBox<String> modalidadComboBox, dificultadComboBox;
     private JButton exitButton;
     private JButton playButton;
     private JButton settingsButton;
@@ -72,12 +72,6 @@ public class POOBvsZombiesGUI extends JFrame {
         menuPanel.add(createLabeledPanel("Selecciona Modalidad:", modalidadComboBox));
         menuPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        // Modo de juego
-        modoJuegoComboBox = new JComboBox<>(new String[]{"Día"});
-        modoJuegoComboBox.setBackground(new Color(135, 87, 11));
-        modoJuegoComboBox.setForeground(new Color(219, 195, 54));
-        menuPanel.add(createLabeledPanel("Selecciona Modo de Juego:", modoJuegoComboBox));
-        menuPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         // Dificultad
         dificultadComboBox = new JComboBox<>(new String[]{"Fácil", "Medio", "Difícil"});
