@@ -9,20 +9,20 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
-public class POOBvsZombiesTablero extends JFrame {
+public class POOBvsZombiesTablero1vs1 extends JFrame {
     private JLabel imageLabel;
     private Clip musicClip;
     private List<String> selectedPlants;
+    private List<String> selectedZombies;
     private JButton pauseButton;
     private boolean isMusicPlaying = true;
     private JButton menuButton;
     private JButton confButton;
     private JButton resetButton;
-
-
-    public POOBvsZombiesTablero(Clip currentMusic, List<String> selectedPlants) {
+    public POOBvsZombiesTablero1vs1(Clip currentMusic, List<String> selectedZombies, List<String> selectedPlants) {
         super("POOBvsZombies");
         this.selectedPlants = selectedPlants;
+        this.selectedZombies = selectedZombies;
         // Pausar la música actual
         if (currentMusic != null && currentMusic.isRunning()) {
             currentMusic.stop();

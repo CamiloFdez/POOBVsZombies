@@ -62,6 +62,8 @@ public class POOBvsZombiesChooseZ extends JFrame {
         addImageButton(buttonPanel, "/Imagenes/zombie.png", "Acción 1");
         addImageButton(buttonPanel, "/Imagenes/zombieCono.png", "Acción 2");
         addImageButton(buttonPanel, "/Imagenes/zombieBalde.png", "Acción 3");
+        addImageButton(buttonPanel, "/Imagenes/POOBZombie1.png", "Accion 4");
+        addImageButton(buttonPanel, "/Imagenes/POOBZombie2.png", "Accion 5");
 
         // Panel para el boton de jugar y volver al menu
         JPanel botPanel = new JPanel();
@@ -178,7 +180,7 @@ public class POOBvsZombiesChooseZ extends JFrame {
                 button.putClientProperty("illuminated", false);
                 selectedButtons.remove(actionCommand);
             } else {
-                button.setBackground(new Color(9, 9, 9)); // Color iluminado
+                button.setBackground(new Color(73, 101, 48)); // Color iluminado
                 button.putClientProperty("illuminated", true);
                 selectedButtons.add(actionCommand);
             }
