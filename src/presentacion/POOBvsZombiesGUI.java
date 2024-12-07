@@ -8,12 +8,13 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class POOBvsZombiesGUI extends JFrame {
 
     // Atributos
     private JPanel menuPanel;
-    private JComboBox<String> modalidadComboBox, dificultadComboBox;
     private JButton exitButton;
     private JButton playButton;
     private JButton settingsButton;
@@ -56,35 +57,28 @@ public class POOBvsZombiesGUI extends JFrame {
         JLabel imageLabel = new JLabel(icon);
         contentPane.add(imageLabel, BorderLayout.NORTH); // Imagen arriba
 
-        //** Panel lateral derecho (Menú)
+        // Panel lateral derecho (Menú)
         menuPanel = new JPanel();
-        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
+        menuPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
         menuPanel.setBackground(new Color(8, 105, 14));
         menuPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         menuPanel.add(Box.createVerticalGlue());
 
-        // Modalidad
-        modalidadComboBox = new JComboBox<>(new String[]{
-                "Player vs Player (PvsP)", "Player vs Machine (PvsM)", "Machine vs Machine (MvsM)"
-        });
-        modalidadComboBox.setBackground(new Color(135, 87, 11));
-        modalidadComboBox.setForeground(new Color(219, 195, 54));
-        menuPanel.add(createLabeledPanel("Selecciona Modalidad:", modalidadComboBox));
-        menuPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        addImageButton(menuPanel, "/Imagenes/PvsP.png", "PvsP");
+        addImageButton(menuPanel, "/Imagenes/PvsM.png", "PvsM");
+        addImageButton(menuPanel, "/Imagenes/MvsM.png", "MvsM");
 
+        // Añadir menú al panel derecho
+        contentPane.add(menuPanel, BorderLayout.CENTER);
 
-        // Dificultad
-        dificultadComboBox = new JComboBox<>(new String[]{"Fácil", "Medio", "Difícil"});
-        dificultadComboBox.setBackground(new Color(135, 87, 11));
-        dificultadComboBox.setForeground(new Color(219, 195, 54));
-        menuPanel.add(createLabeledPanel("Selecciona Nivel de Dificultad:", dificultadComboBox));
-        menuPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        // Panel inferior
+        JPanel bottomPanel = new JPanel(new BorderLayout()); // Cambiado a BorderLayout
+        bottomPanel.setBackground(new Color(8, 105, 14));
 
-        // Panel para botones "Jugar" y "Salir"
+        // Panel para botones "Jugar" y "Salir" (Centro abajo)
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         buttonsPanel.setBackground(new Color(8, 105, 14));
-
 
         // Botón "Salir"
         exitButton = new JButton("Salir");
@@ -100,46 +94,26 @@ public class POOBvsZombiesGUI extends JFrame {
         playButton.setFont(new Font("Arial", Font.BOLD, 14));
         buttonsPanel.add(playButton);
 
-        menuPanel.add(buttonsPanel);
-        menuPanel.add(Box.createVerticalGlue());
+        // Botón configuración (Derecha abajo)
+        JPanel settingsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        settingsPanel.setBackground(new Color(8, 105, 14));
 
-        // Añadir menú al panel derecho
-        contentPane.add(menuPanel, BorderLayout.CENTER);
-
-        // Panel inferior izquierdo para "Configuración"
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        bottomPanel.setBackground(new Color(8, 105, 14));
-
-        // Botón configuración
         settingsButton = new JButton("Configuración");
         settingsButton.setBackground(new Color(127, 121, 172));
         settingsButton.setForeground(new Color(48, 228, 30));
         settingsButton.setFont(new Font("Arial", Font.BOLD, 14));
         settingsButton.addActionListener(e -> showSettingsDialog());
-        bottomPanel.add(settingsButton);
+        settingsPanel.add(settingsButton);
 
+        // Añadir paneles al panel inferior
+        bottomPanel.add(buttonsPanel, BorderLayout.CENTER); // Botones "Jugar" y "Salir" en el centro
+        bottomPanel.add(settingsPanel, BorderLayout.EAST); // Botón "Configuración" a la derecha
+
+        // Añadir panel inferior al contenido principal
         contentPane.add(bottomPanel, BorderLayout.SOUTH);
     }
 
-    // Crea un panel con un JLabel y un JComboBox centrado
-    private JPanel createLabeledPanel(String labelText, JComboBox<String> comboBox) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel label = new JLabel(labelText);
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        panel.setBackground(new Color(8, 105, 14));
-
-        panel.add(label);
-
-        comboBox.setPreferredSize(new Dimension(200, 30));
-        comboBox.setMaximumSize(new Dimension(200, 30));
-        panel.add(comboBox);
-
-        return panel;
-    }
 
     private void prepareActions() {
         // Agregar acción al botón de salida
@@ -155,18 +129,33 @@ public class POOBvsZombiesGUI extends JFrame {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                POOBvsZombiesChoosePlants tablero = new POOBvsZombiesChoosePlants(clip);
-                tablero.setVisible(true);
-                ((JFrame) SwingUtilities.getWindowAncestor(playButton)).dispose();
-            }
-        });
+                if (selectedButton == null) {
+                    // Mostrar un mensaje si no se seleccionó ningún botón
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Por favor, selecciona un modo de juego antes de continuar.",
+                            "Modo de Juego No Seleccionado",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+                    return;
+                }
 
-        // Agregar un WindowListener para manejar el cierre con la "X"
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                // Cerrar la ventana sin confirmar cuando se oprime la "X"
-                System.exit(0);  // Cerrar la aplicación sin confirmación
+                if (selectedButton.getActionCommand().equals("PvsP")) {
+                    // Acción para "PvsP"
+                    POOBvsZombiesChoosePlants tablero = new POOBvsZombiesChoosePlants(clip);
+                    tablero.setVisible(true);
+                } else if (selectedButton.getActionCommand().equals("PvsM")) {
+                    // Acción para "PvsM"
+                    POOBvsZombiesChoosePlants tablero = new POOBvsZombiesChoosePlants(clip);
+                    tablero.setVisible(true);
+                } else if (selectedButton.getActionCommand().equals("MvsM")) {
+                    // Acción para "MvsM"
+                    POOBvsZombiesChoosePlants tablero = new POOBvsZombiesChoosePlants(clip);
+                    tablero.setVisible(true);
+                }
+
+                // Cerrar la ventana actual
+                ((JFrame) SwingUtilities.getWindowAncestor(playButton)).dispose();
             }
         });
     }
@@ -296,6 +285,29 @@ public class POOBvsZombiesGUI extends JFrame {
             setLocationRelativeTo(null);
         }
     }
+
+
+    private JButton selectedButton = null;
+
+    // Método para añadir un botón de imagen con lógica de selección
+    private void addImageButton(JPanel panel, String imagePath, String actionCommand) {
+        JButton button = new JButton(new ImageIcon(getClass().getResource(imagePath)));
+        button.setActionCommand(actionCommand);
+        button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+        button.setFocusPainted(false); //
+        button.setContentAreaFilled(false); //
+
+        button.addActionListener(e -> {
+            if (selectedButton != null) {
+                selectedButton.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+            }
+            button.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 3));
+            selectedButton = button;
+        });
+
+        panel.add(button);
+    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
