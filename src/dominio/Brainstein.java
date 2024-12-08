@@ -55,7 +55,7 @@ public class Brainstein extends ZombiePasivo {
         return cerebrosGenerados;
     }
 
-    public static int getCosto() {
+    public int getCosto() {
         return COSTO;
     }
 

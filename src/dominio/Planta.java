@@ -3,10 +3,12 @@ package dominio;
 public abstract class Planta {
     private String name;
     private int health;
+    private int costo;
 
-    public Planta(String name, int health) {
+    public Planta(String name, int health, int costo) {
         this.name = name;
         this.health = health;
+        this.costo = costo;
     }
 
     public String getName() {
@@ -28,10 +30,9 @@ public abstract class Planta {
         return health > 0;
     }
 
-    /**
-     * Método abstracto que define una acción única para cada planta.
-     */
+    public int getCosto() {
+        return costo;
+    }
+
     public abstract void performAction();
 }
-
-

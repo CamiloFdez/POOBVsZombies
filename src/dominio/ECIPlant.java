@@ -25,7 +25,7 @@ public class ECIPlant extends PlantaPasiva {
 
     }
 
-    public static int getCosto() {
+    public int getCosto() {
         return COSTO;
     }
 }

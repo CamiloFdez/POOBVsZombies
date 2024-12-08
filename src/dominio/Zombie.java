@@ -1,20 +1,18 @@
 package dominio;
 
-/**
- * Representa un zombi genérico en el juego.
- * Clase abstracta que define el comportamiento básico de los zombis.
- */
 public abstract class Zombie {
     private String name;
     private int health;
     private int damage;
     private double attackInterval;
+    private int costo; // Costo del zombi en cerebros
 
-    public Zombie(String name, int health, int damage, double attackInterval) {
+    public Zombie(String name, int health, int damage, double attackInterval, int costo) {
         this.name = name;
         this.health = health;
         this.damage = damage;
         this.attackInterval = attackInterval;
+        this.costo = costo;
     }
 
     public String getName() {
@@ -44,15 +42,11 @@ public abstract class Zombie {
         return attackInterval;
     }
 
-    /**
-     * Método abstracto que define el movimiento específico del zombi.
-     */
+    public int getCosto() {
+        return costo;
+    }
+
     public abstract void move();
 
-    /**
-     * Método abstracto que define el ataque específico del zombi.
-     * @param plant La planta a la que ataca.
-     */
     public abstract void attack(Planta plant);
 }
-
