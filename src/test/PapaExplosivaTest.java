@@ -20,5 +20,6 @@ class PapaExplosivaTest {
         assertEquals(0, zombie.getHealth(), "El zombi debería haber sido destruido completamente por la explosión");
         assertFalse(papaExplosiva.isAlive(), "La papa explosiva debería destruirse al explotar");
     }
+    
 }
 

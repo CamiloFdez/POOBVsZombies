@@ -46,6 +46,31 @@ class TableroTest {
         assertTrue(zombie1.isAlive(), "El zombi básico debería estar vivo después de moverse");
         assertTrue(zombie2.isAlive(), "El zombi con cono debería estar vivo después de moverse");
     }
+
+    @org.junit.jupiter.api.Test
+    void testRecoleccionSoles() {
+        Tablero tablero = new Tablero(5, 5);
+        Girasol girasol = new Girasol();
+        ECIPlant eciPlant = new ECIPlant();
+
+        // Colocar plantas en el tablero
+        tablero.colocarPlanta(girasol, 2, 2);
+        tablero.colocarPlanta(eciPlant, 3, 3);
+
+        // Simular la generación de soles
+        girasol.performPassiveAction();
+        eciPlant.performPassiveAction();
+
+        try {
+            Thread.sleep(21000); // Esperar 21 segundos para asegurar generación
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Recoger soles
+        tablero.recogerSoles();
+        assertEquals(75, tablero.getSolesRecogidos(), "El tablero debería haber recogido 75 soles (50 ECI + 25 Girasol)");
+    }
 }
 
 

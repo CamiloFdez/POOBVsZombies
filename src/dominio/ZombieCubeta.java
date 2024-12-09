@@ -12,35 +12,37 @@ public class ZombieCubeta extends Zombie {
     private static final int VIDA_BASICA = 100;
     private static final int DAMAGE = 100;
     private static final double INTERVALO_ATAQUE = 0.5;
+
     private int vidaCubeta;
 
     public ZombieCubeta() {
-        super("Zombie Cubeta", VIDA_CUBETA + VIDA_BASICA, DAMAGE, INTERVALO_ATAQUE);
+        super("Zombie Cubeta", VIDA_BASICA, DAMAGE, INTERVALO_ATAQUE);
         this.vidaCubeta = VIDA_CUBETA;
     }
 
-    /**
-     * Reduce la vida de la cubeta antes de afectar la salud del zombi básico.
-     */
     @Override
     public void decreaseHealth(int amount) {
         if (vidaCubeta > 0) {
             vidaCubeta -= amount;
             if (vidaCubeta < 0) {
-                super.decreaseHealth(-vidaCubeta);
+                super.decreaseHealth(-vidaCubeta); // El exceso de daño pasa a la salud básica
                 vidaCubeta = 0;
             }
         } else {
-            super.decreaseHealth(amount);
+            super.decreaseHealth(amount); // Daño directo a la salud básica
         }
     }
 
-    /**
-     * Indica si la cubeta aún tiene resistencia.
-     * @return true si la cubeta tiene vida restante, de lo contrario false.
-     */
     public boolean hasCubeta() {
         return vidaCubeta > 0;
+    }
+
+    public int getVidaCubeta() {
+        return vidaCubeta;
+    }
+
+    public int getCosto() {
+        return COSTO;
     }
 
     @Override
@@ -67,9 +69,6 @@ public class ZombieCubeta extends Zombie {
             }, 0, (long) (getAttackInterval() * 1000));
         }
     }
-
-    public int getCosto() {
-        return COSTO;
-    }
 }
+
 
