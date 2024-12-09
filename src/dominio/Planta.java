@@ -5,7 +5,7 @@ public abstract class Planta {
     private int health;
     private int costo;
 
-    public Planta(String name, int health, int costo) {
+    public Planta(String name, int health) {
         this.name = name;
         this.health = health;
         this.costo = costo;

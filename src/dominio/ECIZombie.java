@@ -35,7 +35,7 @@ public class ECIZombie extends ZombieDisparador {
         }
     }
 
-    public static int getCosto() {
+    public int getCosto() {
         return COSTO;
     }
 }

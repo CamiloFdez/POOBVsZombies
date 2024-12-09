@@ -16,7 +16,8 @@ public class POOBVsZombiesMenu1 extends JFrame {
     public POOBVsZombiesMenu1() {
         // Configuración de la ventana principal
         setTitle("Nueva Partida o Cargar Partida");
-        setSize(400, 300);
+        setSize(Toolkit.getDefaultToolkit().getScreenSize().width / 2,
+                Toolkit.getDefaultToolkit().getScreenSize().height / 2);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -25,9 +26,13 @@ public class POOBVsZombiesMenu1 extends JFrame {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         add(titleLabel, BorderLayout.NORTH);
 
-        // Imagen del sistema
-        ImageIcon imageIcon = new ImageIcon(getClass().getResource("/Imagenes/fondo2.png")); // Ajusta si es necesario
-        JLabel imageLabel = new JLabel(imageIcon);
+        // Imagen redimensionada
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/Imagenes/menucargar .png"));
+        Image scaledImage = originalIcon.getImage().getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width / 2,
+                Toolkit.getDefaultToolkit().getScreenSize().height / 2, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+        JLabel imageLabel = new JLabel(scaledIcon);
         imageLabel.setHorizontalAlignment(JLabel.CENTER);
         add(imageLabel, BorderLayout.CENTER);
 
@@ -56,17 +61,29 @@ public class POOBVsZombiesMenu1 extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
                 int result = fileChooser.showOpenDialog(POOBVsZombiesMenu1.this);
+
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
-                    JOptionPane.showMessageDialog(null,
-                            "Archivo cargado: " + selectedFile.getAbsolutePath());
-                    // Aquí puedes implementar lógica adicional para cargar la partida
+
+                    if (!selectedFile.getName().endsWith(".dat")) {
+                        JOptionPane.showMessageDialog(null, "Por favor selecciona un archivo .dat");
+                        return;
+                    }
+
+                    try {
+                        Object partida = GameDataManager.cargarPartida(selectedFile.getAbsolutePath());
+                        JOptionPane.showMessageDialog(null, "Partida cargada: " + partida.toString());
+                    } catch (IOException | ClassNotFoundException ex) {
+                        JOptionPane.showMessageDialog(null, "Error al cargar la partida: " + ex.getMessage());
+                    }
                 }
             }
         });
 
-        playBackgroundMusic("/musica/menuTheme.wav");
+<<<<<<< HEAD
 
+=======
+>>>>>>> 292bd7b3f9cf5bee4285e62c405d6b79d4e6ac78
         setVisible(true);
     }
 
@@ -74,18 +91,14 @@ public class POOBVsZombiesMenu1 extends JFrame {
      * Método para abrir el menú principal del juego
      */
     private void goToMainGame() {
-        // Ocultar el menú actual (sin cerrarlo)
-        this.setVisible(false);
+        setVisible(false);
 
-        // Instanciar la GUI principal del juego
-        SwingUtilities.invokeLater(() -> {
-            new POOBvsZombiesGUI();
-        });
+        POOBvsZombiesGUI a = new POOBvsZombiesGUI();
+        a.setVisible(true);
     }
 
     public void playBackgroundMusic(String resourcePath) {
         try {
-            // Obtén el recurso como InputStream desde el classpath
             InputStream audioSrc = getClass().getResourceAsStream(resourcePath);
             if (audioSrc == null) {
                 System.err.println("Error: No se encontró el recurso: " + resourcePath);

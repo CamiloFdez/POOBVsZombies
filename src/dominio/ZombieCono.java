@@ -68,7 +68,7 @@ public class ZombieCono extends Zombie {
         }
     }
 
-    public static int getCosto() {
+    public int getCosto() {
         return COSTO;
     }
 }

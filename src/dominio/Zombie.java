@@ -7,7 +7,7 @@ public abstract class Zombie {
     private double attackInterval;
     private int costo; // Costo del zombi en cerebros
 
-    public Zombie(String name, int health, int damage, double attackInterval, int costo) {
+    public Zombie(String name, int health, int damage, double attackInterval) {
         this.name = name;
         this.health = health;
         this.damage = damage;
