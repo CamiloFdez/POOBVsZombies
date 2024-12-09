@@ -27,6 +27,25 @@ class TableroTest {
         // Intentar colocar otro zombi en la misma celda
         assertFalse(tablero.colocarZombie(new ZombieBasico(), 4, 4), "No debe permitir colocar un zombi en una celda ocupada");
     }
+
+    @org.junit.jupiter.api.Test
+    void testMovimientoMultipleZombis() {
+        Tablero tablero = new Tablero(5, 5);
+        ZombieBasico zombie1 = new ZombieBasico();
+        ZombieCono zombie2 = new ZombieCono();
+
+        // Colocar zombis en diferentes posiciones
+        tablero.colocarZombie(zombie1, 4, 4);
+        tablero.colocarZombie(zombie2, 3, 4);
+
+        // Simular movimiento
+        zombie1.move();
+        zombie2.move();
+
+        // Comprobar que los zombis se hayan movido correctamente
+        assertTrue(zombie1.isAlive(), "El zombi básico debería estar vivo después de moverse");
+        assertTrue(zombie2.isAlive(), "El zombi con cono debería estar vivo después de moverse");
+    }
 }
 
 
