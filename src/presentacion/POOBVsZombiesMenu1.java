@@ -16,7 +16,8 @@ public class POOBVsZombiesMenu1 extends JFrame {
     public POOBVsZombiesMenu1() {
         // Configuración de la ventana principal
         setTitle("Nueva Partida o Cargar Partida");
-        setSize(400, 300);
+        setSize(Toolkit.getDefaultToolkit().getScreenSize().width / 2,
+                Toolkit.getDefaultToolkit().getScreenSize().height / 2);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -25,9 +26,13 @@ public class POOBVsZombiesMenu1 extends JFrame {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         add(titleLabel, BorderLayout.NORTH);
 
-        // Imagen del sistema
-        ImageIcon imageIcon = new ImageIcon(getClass().getResource("/Imagenes/fondo2.png")); // Ajusta si es necesario
-        JLabel imageLabel = new JLabel(imageIcon);
+        // Imagen redimensionada
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/Imagenes/menucargar .png"));
+        Image scaledImage = originalIcon.getImage().getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width / 2,
+                Toolkit.getDefaultToolkit().getScreenSize().height / 2, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+        JLabel imageLabel = new JLabel(scaledIcon);
         imageLabel.setHorizontalAlignment(JLabel.CENTER);
         add(imageLabel, BorderLayout.CENTER);
 
