@@ -4,6 +4,7 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -18,7 +19,7 @@ public class POOBvsZombiesTablero extends JFrame {
     private JButton menuButton;
     private JButton confButton;
     private JButton resetButton;
-
+    private JButton saveButton;
 
     public POOBvsZombiesTablero(Clip currentMusic, List<String> selectedPlants) {
         super("POOBvsZombies");
@@ -33,21 +34,10 @@ public class POOBvsZombiesTablero extends JFrame {
     }
 
     private void prepareElements() {
-        menuButton = new JButton("Menú");
-        confButton = new JButton("Configuración");
-        resetButton = new JButton("Reiniciar");
-
-        menuButton.setBackground(new Color(127, 121, 172));
-        menuButton.setForeground(new Color(48, 228, 30));
-        menuButton.setFont(new Font("Arial", Font.BOLD, 14));
-
-        confButton.setBackground(new Color(127, 121, 172));
-        confButton.setForeground(new Color(48, 228, 30));
-        confButton.setFont(new Font("Arial", Font.BOLD, 14));
-
-        resetButton.setBackground(new Color(127, 121, 172));
-        resetButton.setForeground(new Color(48, 228, 30));
-        resetButton.setFont(new Font("Arial", Font.BOLD, 14));
+        menuButton = createButton("menu");
+        confButton = createButton("configuración");
+        resetButton = createButton("reiniciar");
+        saveButton = createButton("guardar");
 
 
         // Configuración general de la ventana
@@ -68,14 +58,14 @@ public class POOBvsZombiesTablero extends JFrame {
 
         // Panel para los botones de plantas y pala
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT,10,10)); // Alinear a la izquierda
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10)); // Alinear a la izquierda
         buttonPanel.setOpaque(false); // Hacer transparente
         buttonPanel.setBounds(0, 0, getWidth(), 70); // Posición en la parte superior
         buttonPanel.setBackground(new Color(111, 64, 48));
 
         // Panel para el boton de pausa
         JPanel pausePanel = new JPanel();
-        pausePanel.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10)); // Alinear a la izquierda
+        pausePanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10)); // Alinear a la izquierda
         pausePanel.setOpaque(false); // Hacer transparente
         pausePanel.setBounds(-10, 0, getWidth(), 70); // Posición en la parte superior
 
@@ -95,7 +85,7 @@ public class POOBvsZombiesTablero extends JFrame {
         for (int i = 0; i < selectedPlants.size(); i++) {
             if (selectedPlants.get(i).equals("Acción 1")) {
                 addImageButton(buttonPanel, "/Imagenes/girasol.png", "Acción 1");
-            } else if ( selectedPlants.get(i).equals("Acción 2")) {
+            } else if (selectedPlants.get(i).equals("Acción 2")) {
                 addImageButton(buttonPanel, "/Imagenes/guisante.png", "Acción 2");
             } else if (selectedPlants.get(i).equals("Acción 3")) {
                 addImageButton(buttonPanel, "/Imagenes/papa.png", "Acción 3");
@@ -105,7 +95,6 @@ public class POOBvsZombiesTablero extends JFrame {
                 addImageButton(buttonPanel, "/Imagenes/POOBplanta.png", "Accion 5");
             }
         }
-
 
 
         // Añadir el panel de botones a una capa superior
@@ -151,6 +140,7 @@ public class POOBvsZombiesTablero extends JFrame {
 
     /**
      * Metodo para poner nueva musica de fondo
+     *
      * @param musicPath
      */
     private void playNewMusic(String musicPath) {
@@ -194,13 +184,15 @@ public class POOBvsZombiesTablero extends JFrame {
         menuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         confButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         resetButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         menuPanel.add(menuButton);
         menuPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         menuPanel.add(confButton);
         menuPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         menuPanel.add(resetButton);
+        menuPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        menuPanel.add(saveButton);
         menuPanel.add(Box.createVerticalGlue()); // Agrega espacio al final
-
 
         JPanel contentPanel = createContentPanel();
 
@@ -217,6 +209,7 @@ public class POOBvsZombiesTablero extends JFrame {
 
     /**
      * Metodo constructor para crear un boton
+     *
      * @param text
      * @return button
      */
@@ -230,6 +223,7 @@ public class POOBvsZombiesTablero extends JFrame {
 
     /**
      * Metodo constructor para crear un panel
+     *
      * @return JPanel
      */
     private JPanel createContentPanel() {
@@ -263,6 +257,7 @@ public class POOBvsZombiesTablero extends JFrame {
 
     /**
      * Matodo para crear una imagen como boton con acción
+     *
      * @param panel
      * @param imagePath
      * @param actionCommand
@@ -307,6 +302,7 @@ public class POOBvsZombiesTablero extends JFrame {
 
     /**
      * Metodo para alternar musica segun el estado del JCheckBox
+     *
      * @param playMusic
      */
     public void toggleMusic(boolean playMusic) {
@@ -338,6 +334,7 @@ public class POOBvsZombiesTablero extends JFrame {
 
     /**
      * Metodo para poner musica de fondo
+     *
      * @param resourcePath
      */
     public void playBackgroundMusic(String resourcePath) {
@@ -385,6 +382,9 @@ public class POOBvsZombiesTablero extends JFrame {
         if (resetButton != null) {
             resetButton.addActionListener(e -> resetGame());
         }
+        if (saveButton != null) {
+            saveButton.addActionListener(e -> saveGame());
+        }
     }
 
     /**
@@ -412,5 +412,12 @@ public class POOBvsZombiesTablero extends JFrame {
         POOBvsZombiesChoosePlants plantas = new POOBvsZombiesChoosePlants(clip);
         plantas.setVisible(true);
         dispose();
+    }
+
+    /**
+     * Metodo para guardar la partida
+     */
+    private void saveGame() {
+        System.out.println("Salvando el archivo");
     }
 }
