@@ -9,6 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.sound.sampled.*;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import javax.sound.sampled.*;
+
 public class POOBVsZombiesMenu1 extends JFrame {
     private Clip clip;
     private boolean isMusicPlaying = false;
@@ -16,25 +22,33 @@ public class POOBVsZombiesMenu1 extends JFrame {
     public POOBVsZombiesMenu1() {
         // Configuración de la ventana principal
         setTitle("Nueva Partida o Cargar Partida");
-        setSize(Toolkit.getDefaultToolkit().getScreenSize().width / 2,
-                Toolkit.getDefaultToolkit().getScreenSize().height / 2);
+        setSize(Toolkit.getDefaultToolkit().getScreenSize().width / 2,  // Tamaño ajustado
+                Toolkit.getDefaultToolkit().getScreenSize().height / 2); // Tamaño ajustado
+        setLocationRelativeTo(null); // Centra la ventana en la pantalla
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+
+        // Panel de fondo con imagen
+        JPanel backgroundPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                // Cargar la imagen
+                ImageIcon originalIcon = new ImageIcon(getClass().getResource("/Imagenes/menucargar.png"));
+                Image scaledImage = originalIcon.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
+                ImageIcon scaledIcon = new ImageIcon(scaledImage);
+                // Dibujar la imagen
+                g.drawImage(scaledIcon.getImage(), 0, 0, null);
+            }
+        };
+
+        backgroundPanel.setLayout(new BorderLayout());  // Layout para que se adapten los componentes
+        add(backgroundPanel, BorderLayout.CENTER);
 
         // Título
         JLabel titleLabel = new JLabel("Selecciona una opción", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        add(titleLabel, BorderLayout.NORTH);
-
-        // Imagen redimensionada
-        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/Imagenes/menucargar .png"));
-        Image scaledImage = originalIcon.getImage().getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width / 2,
-                Toolkit.getDefaultToolkit().getScreenSize().height / 2, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(scaledImage);
-
-        JLabel imageLabel = new JLabel(scaledIcon);
-        imageLabel.setHorizontalAlignment(JLabel.CENTER);
-        add(imageLabel, BorderLayout.CENTER);
+        backgroundPanel.add(titleLabel, BorderLayout.NORTH);
 
         // Botones de Nueva Partida y Cargar Partida
         JPanel buttonPanel = new JPanel();
@@ -45,7 +59,7 @@ public class POOBVsZombiesMenu1 extends JFrame {
 
         buttonPanel.add(newGameButton);
         buttonPanel.add(loadGameButton);
-        add(buttonPanel, BorderLayout.SOUTH);
+        backgroundPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         // Acción para "Nueva Partida"
         newGameButton.addActionListener(new ActionListener() {
@@ -80,10 +94,6 @@ public class POOBVsZombiesMenu1 extends JFrame {
             }
         });
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 292bd7b3f9cf5bee4285e62c405d6b79d4e6ac78
         setVisible(true);
     }
 
@@ -123,3 +133,4 @@ public class POOBVsZombiesMenu1 extends JFrame {
         SwingUtilities.invokeLater(POOBVsZombiesMenu1::new);
     }
 }
+
