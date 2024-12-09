@@ -65,8 +65,6 @@ public class POOBVsZombiesMenu1 extends JFrame {
             }
         });
 
-        playBackgroundMusic("/musica/menu_theme.wav");
-
         setVisible(true);
     }
 
@@ -74,18 +72,14 @@ public class POOBVsZombiesMenu1 extends JFrame {
      * Método para abrir el menú principal del juego
      */
     private void goToMainGame() {
-        // Ocultar el menú actual (sin cerrarlo)
-        this.setVisible(false);
+        setVisible(false);
 
-        // Instanciar la GUI principal del juego
-        SwingUtilities.invokeLater(() -> {
-            new POOBvsZombiesGUI();
-        });
+        POOBvsZombiesGUI a = new POOBvsZombiesGUI();
+        a.setVisible(true);
     }
 
     public void playBackgroundMusic(String resourcePath) {
         try {
-            // Obtén el recurso como InputStream desde el classpath
             InputStream audioSrc = getClass().getResourceAsStream(resourcePath);
             if (audioSrc == null) {
                 System.err.println("Error: No se encontró el recurso: " + resourcePath);
