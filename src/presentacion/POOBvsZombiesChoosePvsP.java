@@ -96,7 +96,6 @@ public class POOBvsZombiesChoosePvsP extends JFrame {
                 dispose();
             }
         });
-
         menuButton.addActionListener(e -> {
             if (musicClip != null && musicClip.isRunning()) {
                 musicClip.stop();

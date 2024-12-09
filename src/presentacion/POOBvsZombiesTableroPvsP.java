@@ -212,7 +212,9 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
         }
     }
 
-
+    /**
+     * Metodo para la accion del boton de pausa(configuracion, reiniciar, etc)
+     */
     private void showPauseDialog() {
         JDialog settingsDialog = new JDialog(this, "Pausa", true);
         settingsDialog.setLayout(new BorderLayout());
@@ -365,7 +367,10 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
         }
     }
 
-    // Alternar pantalla completa
+    /**
+     * Metodo para cambiar a pantalla completa o no
+     * @param fullScreen
+     */
     public void toggleFullScreen(boolean fullScreen) {
         if (fullScreen) {
             setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -385,7 +390,7 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
     private Clip clip;
 
     /**
-     * Metodo para poner musica de fondo (toca eliminar uno de los dos)
+     * Metodo para poner musica de fondo
      * @param resourcePath
      */
     public void playBackgroundMusic(String resourcePath) {

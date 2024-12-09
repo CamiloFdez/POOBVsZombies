@@ -4,15 +4,14 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
+
 public class POOBvsZombiesTablero extends JFrame {
     private JLabel imageLabel;
-    private Clip musicClip;
     private List<String> selectedPlants;
     private JButton pauseButton;
     private boolean isMusicPlaying = true;
@@ -20,6 +19,7 @@ public class POOBvsZombiesTablero extends JFrame {
     private JButton confButton;
     private JButton resetButton;
     private JButton saveButton;
+
 
     public POOBvsZombiesTablero(Clip currentMusic, List<String> selectedPlants) {
         super("POOBvsZombies");
@@ -33,6 +33,9 @@ public class POOBvsZombiesTablero extends JFrame {
         playNewMusic("/musica/musicaTablero.wav"); // Ruta al archivo de música nuevo
     }
 
+    /**
+     * Metodos para preparar los elementos visuales del tablero
+     */
     private void prepareElements() {
         menuButton = createButton("menu");
         confButton = createButton("configuración");
@@ -129,7 +132,7 @@ public class POOBvsZombiesTablero extends JFrame {
     }
 
     /**
-     * Metodo para poner una imagen como fondo
+     * Metodo para poner una imagen como fondo (tablero)
      */
     private void setScaledBackgroundImage() {
         // Cargar y escalar la imagen para que ocupe toda la ventana
@@ -140,7 +143,6 @@ public class POOBvsZombiesTablero extends JFrame {
 
     /**
      * Metodo para poner nueva musica de fondo
-     *
      * @param musicPath
      */
     private void playNewMusic(String musicPath) {
@@ -167,7 +169,7 @@ public class POOBvsZombiesTablero extends JFrame {
     }
 
     /**
-     * Metodo para la creacion del boton pausa
+     * Metodo para la creacion del boton pausa con sus distintas funcionalidades
      */
     private void showPauseDialog() {
         JDialog settingsDialog = new JDialog(this, "Pausa", true);
@@ -415,9 +417,34 @@ public class POOBvsZombiesTablero extends JFrame {
     }
 
     /**
-     * Metodo para guardar la partida
+     * Metodo que permite guardar la partida creando un .dat y guardandolo
+     * en la ubiacion seleccionada
      */
     private void saveGame() {
-        System.out.println("Salvando el archivo");
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar Partida");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        int userSelection = fileChooser.showSaveDialog(null);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+            if (!filePath.endsWith(".dat")) {
+                filePath += ".dat"; // Asegurarse de que el archivo tenga la extensión .dat
+            }
+
+            try {
+                // Crear un objeto GameState con los datos actuales
+                GameState gameState = new GameState(selectedPlants, "/musica/musicaTablero.wav");
+
+                // Guardar el estado del juego
+                GameDataManager.guardarPartida(filePath, gameState);
+
+                JOptionPane.showMessageDialog(null, "Partida guardada exitosamente en: " + filePath);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Error al guardar la partida: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+        }
     }
 }

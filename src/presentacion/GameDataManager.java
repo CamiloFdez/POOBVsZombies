@@ -25,9 +25,9 @@ public class GameDataManager {
      * @throws IOException            Si ocurre un error durante la lectura.
      * @throws ClassNotFoundException Si la clase del objeto no se encuentra.
      */
-    public static Object cargarPartida(String filePath) throws IOException, ClassNotFoundException {
+    public static GameState cargarPartida(String filePath) throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
-            return ois.readObject();
+            return (GameState) ois.readObject();
         }
     }
 }

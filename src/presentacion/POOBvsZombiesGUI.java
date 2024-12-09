@@ -139,12 +139,10 @@ public class POOBvsZombiesGUI extends JFrame {
                     );
                     return;
                 }
-
                 if (selectedButton.getActionCommand().equals("PvsP")) {
                     // Acción para "PvsP"
                     POOBvsZombiesChoosePvsP tablero = new POOBvsZombiesChoosePvsP(clip);
                     tablero.setVisible(true);
-
                 } else if (selectedButton.getActionCommand().equals("PvsM")) {
                     // Acción para "PvsM"
                     String[] options = {"Fácil", "Normal", "Difícil"};
@@ -163,13 +161,11 @@ public class POOBvsZombiesGUI extends JFrame {
                         POOBvsZombiesChoosePlants tablero = new POOBvsZombiesChoosePlants(clip);
                         tablero.setVisible(true);
                     }
-
                 } else if (selectedButton.getActionCommand().equals("MvsM")) {
                     // Acción para "MvsM"
                     POOBvsZombiesChoosePlants tablero = new POOBvsZombiesChoosePlants(clip);
                     tablero.setVisible(true);
                 }
-
                 // Cerrar la ventana actual
                 ((JFrame) SwingUtilities.getWindowAncestor(playButton)).dispose();
             }

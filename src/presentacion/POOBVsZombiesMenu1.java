@@ -8,12 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.sound.sampled.*;
+import java.util.List;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import javax.sound.sampled.*;
 
 public class POOBVsZombiesMenu1 extends JFrame {
     private Clip clip;
@@ -85,16 +81,23 @@ public class POOBVsZombiesMenu1 extends JFrame {
                     }
 
                     try {
-                        Object partida = GameDataManager.cargarPartida(selectedFile.getAbsolutePath());
-                        JOptionPane.showMessageDialog(null, "Partida cargada: " + partida.toString());
+                        // Cargar la partida
+                        GameState partida = GameDataManager.cargarPartida(selectedFile.getAbsolutePath());
+
+                        // Crear la nueva instancia de POOBvsZombiesTablero con los datos cargados
+                        List<String> selectedPlants = partida.getSelectedPlants();
+                        String musicPath = partida.getCurrentMusicPath();
+                        Clip currentMusic = null;
+
+                        POOBvsZombiesTablero tablero = new POOBvsZombiesTablero(currentMusic, selectedPlants);
+                        tablero.setVisible(true);
+
                     } catch (IOException | ClassNotFoundException ex) {
                         JOptionPane.showMessageDialog(null, "Error al cargar la partida: " + ex.getMessage());
                     }
                 }
             }
         });
-
-        setVisible(true);
     }
 
     /**
@@ -105,28 +108,6 @@ public class POOBVsZombiesMenu1 extends JFrame {
 
         POOBvsZombiesGUI a = new POOBvsZombiesGUI();
         a.setVisible(true);
-    }
-
-    public void playBackgroundMusic(String resourcePath) {
-        try {
-            InputStream audioSrc = getClass().getResourceAsStream(resourcePath);
-            if (audioSrc == null) {
-                System.err.println("Error: No se encontró el recurso: " + resourcePath);
-                return;
-            }
-
-            // Carga el InputStream en un AudioInputStream
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioSrc);
-
-            // Configura y reproduce el audio
-            clip = AudioSystem.getClip();
-            clip.open(audioStream);
-            clip.loop(Clip.LOOP_CONTINUOUSLY); // Reproducir en bucle
-            clip.start();
-            isMusicPlaying = true;
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
-        }
     }
 
     public static void main(String[] args) {

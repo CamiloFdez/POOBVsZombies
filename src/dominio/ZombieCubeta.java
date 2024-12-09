@@ -15,11 +15,18 @@ public class ZombieCubeta extends Zombie {
 
     private int vidaCubeta;
 
+    /**
+     * Constructor para crear un zombi con cubeta, con atributos predefinidos.
+     */
     public ZombieCubeta() {
         super("Zombie Cubeta", VIDA_BASICA, DAMAGE, INTERVALO_ATAQUE);
         this.vidaCubeta = VIDA_CUBETA;
     }
 
+    /**
+     * Disminuye la salud del zombi, primero reduciendo la vida de la cubeta y luego la salud básica si es necesario.
+     * @param amount La cantidad de daño a aplicar.
+     */
     @Override
     public void decreaseHealth(int amount) {
         if (vidaCubeta > 0) {
@@ -33,23 +40,44 @@ public class ZombieCubeta extends Zombie {
         }
     }
 
+    /**
+     * Verifica si el zombi tiene la cubeta en su cabeza.
+     * @return true si el zombi tiene la cubeta, false si ya no le queda.
+     */
     public boolean hasCubeta() {
         return vidaCubeta > 0;
     }
 
+    /**
+     * Obtiene la vida restante de la cubeta.
+     * @return La cantidad de vida de la cubeta.
+     */
     public int getVidaCubeta() {
         return vidaCubeta;
     }
 
+    /**
+     * Obtiene el costo de este zombi en cerebros.
+     * @return El costo del zombi.
+     */
+    @Override
     public int getCosto() {
         return COSTO;
     }
 
+    /**
+     * Hace que el zombi se mueva en línea recta hacia las plantas.
+     */
     @Override
     public void move() {
         System.out.println(getName() + " avanza en línea recta hacia las plantas.");
     }
 
+    /**
+     * Hace que el zombi ataque a una planta, reduciendo su salud.
+     * Los ataques ocurren en intervalos de tiempo definidos.
+     * @param plant La planta que será atacada por el zombi.
+     */
     @Override
     public void attack(Planta plant) {
         if (plant != null && plant.isAlive()) {

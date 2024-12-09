@@ -169,8 +169,12 @@ public class POOBvsZombiesChoosePlants extends JFrame {
     }
 
     /**
-     * metodo para crear imagenes como botones y almacenarlos en una lista para
-     * su posterior uso
+     * Método para crear botones con imágenes y almacenarlos en una lista para su posterior uso.
+     * Cada botón cambia su color al ser presionado, alternando entre iluminado y no iluminado,
+     * y agrega o elimina su comando de acción de la lista `selectedButtons`.
+     * @param panel El panel al que se añadirá el botón.
+     * @param imagePath Ruta de la imagen que se usará en el botón.
+     * @param actionCommand Comando de acción asociado al botón.
      */
     private List<String> selectedButtons = new ArrayList<>();
     private void addImageButton(JPanel panel, String imagePath, String actionCommand) {
@@ -186,23 +190,20 @@ public class POOBvsZombiesChoosePlants extends JFrame {
 
         // Acción del botón
         button.addActionListener(e -> {
-            // Obtener el estado actual
+            // Obtener el estado actual del boton
             boolean isIlluminated = (boolean) button.getClientProperty("illuminated");
 
             if (isIlluminated) {
+                // Restaurar el color original si ya está iluminado
                 button.setBackground(new Color(111, 64, 48)); // Color original
                 button.putClientProperty("illuminated", false);
-                selectedButtons.remove(actionCommand);
+                selectedButtons.remove(actionCommand);  // Eliminar de la lista
             } else {
                 button.setBackground(new Color(219, 195, 54)); // Color iluminado
                 button.putClientProperty("illuminated", true);
-                selectedButtons.add(actionCommand);
+                selectedButtons.add(actionCommand); // Añadir a la lista
             }
-
         });
-
-        // Añadir el botón al panel
         panel.add(button);
     }
-
 }
