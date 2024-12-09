@@ -56,11 +56,21 @@ public class POOBVsZombiesMenu1 extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
                 int result = fileChooser.showOpenDialog(POOBVsZombiesMenu1.this);
+
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
-                    JOptionPane.showMessageDialog(null,
-                            "Archivo cargado: " + selectedFile.getAbsolutePath());
-                    // Aquí puedes implementar lógica adicional para cargar la partida
+
+                    if (!selectedFile.getName().endsWith(".dat")) {
+                        JOptionPane.showMessageDialog(null, "Por favor selecciona un archivo .dat");
+                        return;
+                    }
+
+                    try {
+                        Object partida = GameDataManager.cargarPartida(selectedFile.getAbsolutePath());
+                        JOptionPane.showMessageDialog(null, "Partida cargada: " + partida.toString());
+                    } catch (IOException | ClassNotFoundException ex) {
+                        JOptionPane.showMessageDialog(null, "Error al cargar la partida: " + ex.getMessage());
+                    }
                 }
             }
         });
