@@ -12,35 +12,37 @@ public class ZombieCono extends Zombie {
     private static final int VIDA_BASICA = 100;
     private static final int DAMAGE = 100;
     private static final double INTERVALO_ATAQUE = 0.5;
+
     private int vidaCono;
 
     public ZombieCono() {
-        super("Zombie Cono", VIDA_CONO + VIDA_BASICA, DAMAGE, INTERVALO_ATAQUE);
+        super("Zombie Cono", VIDA_BASICA, DAMAGE, INTERVALO_ATAQUE);
         this.vidaCono = VIDA_CONO;
     }
 
-    /**
-     * Reduce la vida del cono antes de afectar la salud del zombi básico.
-     */
     @Override
     public void decreaseHealth(int amount) {
         if (vidaCono > 0) {
             vidaCono -= amount;
             if (vidaCono < 0) {
-                super.decreaseHealth(-vidaCono);
+                super.decreaseHealth(-vidaCono); // El exceso de daño se aplica a la salud básica
                 vidaCono = 0;
             }
         } else {
-            super.decreaseHealth(amount);
+            super.decreaseHealth(amount); // Daño directo a la salud básica
         }
     }
 
-    /**
-     * Muestra si el cono todavía tiene resistencia.
-     * @return true si el cono aún tiene vida, de lo contrario, false.
-     */
     public boolean hasCono() {
         return vidaCono > 0;
+    }
+
+    public int getVidaCono() {
+        return vidaCono;
+    }
+
+    public int getCosto() {
+        return COSTO;
     }
 
     @Override
@@ -67,9 +69,6 @@ public class ZombieCono extends Zombie {
             }, 0, (long) (getAttackInterval() * 1000));
         }
     }
-
-    public int getCosto() {
-        return COSTO;
-    }
 }
+
 

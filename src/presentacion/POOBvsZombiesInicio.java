@@ -49,7 +49,7 @@ public class POOBvsZombiesInicio extends JFrame {
         dispose(); // Cierra la ventana de inicio
         // Abrir la ventana del menú principal
         SwingUtilities.invokeLater(() -> {
-            POOBvsZombiesGUI menu = new POOBvsZombiesGUI();
+            POOBVsZombiesMenu1 menu = new POOBVsZombiesMenu1();
             menu.setVisible(true);
         });
     }
