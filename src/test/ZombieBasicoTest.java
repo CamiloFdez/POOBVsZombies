@@ -21,5 +21,19 @@ class ZombieBasicoTest {
 
         assertTrue(girasol.getHealth() < 300, "La salud de la planta debería haber disminuido.");
     }
+
+    @org.junit.jupiter.api.Test
+    void testMovimientoZombieBasico() {
+        ZombieBasico zombie = new ZombieBasico();
+        Tablero tablero = new Tablero(5, 5);
+
+        // Colocar el zombi en el tablero
+        tablero.colocarZombie(zombie, 4, 4);
+
+        // Simular movimiento
+        zombie.move();
+        assertTrue(zombie.isAlive(), "El zombi debería estar vivo después de moverse");
+    }
 }
+
 
