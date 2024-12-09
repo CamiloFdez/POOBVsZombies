@@ -125,6 +125,10 @@ public class POOBvsZombiesChoosePlants extends JFrame {
     private Clip clip;
     private boolean isMusicPlaying = false;
 
+    /**
+     * Metodo para poner musica de fondo
+     * @param resourcePath
+     */
     public void playBackgroundMusic(String resourcePath) {
         try {
             // Obtén el recurso como InputStream desde el classpath
@@ -148,6 +152,10 @@ public class POOBvsZombiesChoosePlants extends JFrame {
         }
     }
 
+    /**
+     * metodo para poner nueva musica
+     * @param musicPath
+     */
     private void playNewMusic(String musicPath) {
         try {
             File musicFile = new File(getClass().getResource(musicPath).toURI());
@@ -160,6 +168,10 @@ public class POOBvsZombiesChoosePlants extends JFrame {
         }
     }
 
+    /**
+     * metodo para crear imagenes como botones y almacenarlos en una lista para
+     * su posterior uso
+     */
     private List<String> selectedButtons = new ArrayList<>();
     private void addImageButton(JPanel panel, String imagePath, String actionCommand) {
         JButton button = new JButton(new ImageIcon(getClass().getResource(imagePath)));

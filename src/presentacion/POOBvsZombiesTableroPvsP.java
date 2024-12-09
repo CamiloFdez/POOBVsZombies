@@ -8,8 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
-public class POOBvsZombiesTablero1vs1 extends JFrame {
+public class POOBvsZombiesTableroPvsP extends JFrame {
     private JLabel imageLabel;
     private Clip musicClip;
     private List<String> selectedPlants;
@@ -19,7 +20,13 @@ public class POOBvsZombiesTablero1vs1 extends JFrame {
     private JButton menuButton;
     private JButton confButton;
     private JButton resetButton;
-    public POOBvsZombiesTablero1vs1(Clip currentMusic, List<String> selectedZombies, List<String> selectedPlants) {
+    private Timer timer;
+    private JLabel timerLabel;
+    private int remainingTime = 120;
+    private boolean isPlantsPhase = true;
+    private JPanel buttonPanel;
+
+    public POOBvsZombiesTableroPvsP(Clip currentMusic, List<String> selectedZombies, List<String> selectedPlants) {
         super("POOBvsZombies");
         this.selectedPlants = selectedPlants;
         this.selectedZombies = selectedZombies;
@@ -33,22 +40,10 @@ public class POOBvsZombiesTablero1vs1 extends JFrame {
     }
 
     private void prepareElements() {
-        menuButton = new JButton("Menú");
-        confButton = new JButton("Configuración");
-        resetButton = new JButton("Reiniciar");
-
-        menuButton.setBackground(new Color(127, 121, 172));
-        menuButton.setForeground(new Color(48, 228, 30));
-        menuButton.setFont(new Font("Arial", Font.BOLD, 14));
-
-        confButton.setBackground(new Color(127, 121, 172));
-        confButton.setForeground(new Color(48, 228, 30));
-        confButton.setFont(new Font("Arial", Font.BOLD, 14));
-
-        resetButton.setBackground(new Color(127, 121, 172));
-        resetButton.setForeground(new Color(48, 228, 30));
-        resetButton.setFont(new Font("Arial", Font.BOLD, 14));
-
+        // Crear botones básicos
+        menuButton = createButton("Menú");
+        confButton = createButton("Configuración");
+        resetButton = createButton("Reiniciar");
 
         // Configuración general de la ventana
         setSize(Toolkit.getDefaultToolkit().getScreenSize().width / 2,
@@ -66,49 +61,39 @@ public class POOBvsZombiesTablero1vs1 extends JFrame {
         imageLabel.setBounds(0, 0, getWidth(), getHeight()); // Ajustar el tamaño al panel
         layeredPane.add(imageLabel, JLayeredPane.DEFAULT_LAYER); // Añadir al nivel base
 
-        // Panel para los botones de plantas y pala
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT,10,10)); // Alinear a la izquierda
+        // Panel para los botones de plantas, zombies y pala
+        buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10)); // Alinear a la izquierda
         buttonPanel.setOpaque(false); // Hacer transparente
         buttonPanel.setBounds(0, 0, getWidth(), 70); // Posición en la parte superior
         buttonPanel.setBackground(new Color(111, 64, 48));
 
-        // Panel para el boton de pausa
+        // Panel para el botón de pausa y fase
         JPanel pausePanel = new JPanel();
-        pausePanel.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10)); // Alinear a la izquierda
+        pausePanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         pausePanel.setOpaque(false); // Hacer transparente
-        pausePanel.setBounds(-10, 0, getWidth(), 70); // Posición en la parte superior
+        pausePanel.setBounds(0, 0, getWidth(), 70); // Posición en la parte superior
 
-        // Añadir pala al panel
-        addImageButton(pausePanel, "/Imagenes/pala.png", "Acción 6");
-
-        // Boton "pausa"
-        pauseButton = new JButton("Pausa");
-        pauseButton.setBackground(new Color(127, 121, 172));
-        pauseButton.setForeground(new Color(48, 228, 30));
-        pauseButton.setFont(new Font("Arial", Font.BOLD, 14));
+        // Añadir botón de pausa
+        pauseButton = createButton("Pausa");
         pauseButton.addActionListener(e -> showPauseDialog());
         pausePanel.add(pauseButton);
 
+        // Botón para cambiar de fase manualmente
+        JButton changePhaseButton = createButton("Cambiar Fase");
+        changePhaseButton.addActionListener(e -> switchToNextPhase());
+        pausePanel.add(changePhaseButton);
 
-        // Añadir botones con imágenes si fueron seleccionados
-        for (int i = 0; i < selectedPlants.size(); i++) {
-            if (selectedPlants.get(i).equals("Acción 1")) {
-                addImageButton(buttonPanel, "/Imagenes/girasol.png", "Acción 1");
-            } else if ( selectedPlants.get(i).equals("Acción 2")) {
-                addImageButton(buttonPanel, "/Imagenes/guisante.png", "Acción 2");
-            } else if (selectedPlants.get(i).equals("Acción 3")) {
-                addImageButton(buttonPanel, "/Imagenes/papa.png", "Acción 3");
-            } else if (selectedPlants.get(i).equals("Accion 4")) {
-                addImageButton(buttonPanel, "/Imagenes/patata.png", "Accion 4");
-            } else if (selectedPlants.get(i).equals("Accion 5")) {
-                addImageButton(buttonPanel, "/Imagenes/POOBplanta.png", "Accion 5");
-            }
-        }
+        // Añadir plantas seleccionadas (inicial)
+        isPlantsPhase = true; // Comenzar en la fase de plantas
+        addPlantButtons(buttonPanel, selectedPlants);
 
+        // Etiqueta del temporizador
+        timerLabel = new JLabel("Tiempo restante: 120");
+        timerLabel.setForeground(Color.WHITE);
+        pausePanel.add(timerLabel);
 
-
-        // Añadir el panel de botones a una capa superior
+        // Añadir los paneles a capas superiores
         layeredPane.add(buttonPanel, JLayeredPane.PALETTE_LAYER);
         layeredPane.add(pausePanel, JLayeredPane.PALETTE_LAYER);
 
@@ -121,6 +106,7 @@ public class POOBvsZombiesTablero1vs1 extends JFrame {
                 setScaledBackgroundImage();
             }
         });
+
 
         // Agregar un MouseListener para detectar clics en el tablero
         imageLabel.addMouseListener(new MouseAdapter() {
@@ -137,9 +123,61 @@ public class POOBvsZombiesTablero1vs1 extends JFrame {
                 System.out.println("Clic en la celda: (" + row + ", " + col + ")");
             }
         });
+
+        // Temporizador
+        remainingTime = 120; // Tiempo inicial
+        timer = new Timer(1000, e -> updateTimer()); // Actualización cada segundo
+        timer.start(); // Iniciar temporizador
     }
 
 
+    /**
+     * Metodo para cambiar entre la ubicacion de plantas y zombies
+     */
+    private void populateButtonPanel() {
+        buttonPanel.removeAll(); // Limpiar botones previos
+        List<String> items = isPlantsPhase ? selectedPlants : selectedZombies;
+        String basePath = "/Imagenes/";
+        for (String item : items) {
+            String imagePath = basePath + item.toLowerCase() + ".png";
+            addImageButton(buttonPanel, imagePath, item);
+        }
+        buttonPanel.revalidate();
+        buttonPanel.repaint();
+    }
+
+
+    /**
+     * Metodo para actualizar el contador luego de haber cambiado de fase
+     */
+    private void updateTimer() {
+        remainingTime--;
+        timerLabel.setText("Tiempo restante: " + remainingTime);
+        if (remainingTime <= 0) {
+            timer.stop();
+            switchToNextPhase(); // Avanzar automáticamente si el tiempo se acaba
+        }
+    }
+
+    /**
+     * Metodo para cambiar de fase, ya sea seleccion de plantas o zombies
+     */
+    private void switchToNextPhase() {
+        if (isPlantsPhase) {
+            isPlantsPhase = false;
+            remainingTime = 120; // Reiniciar el tiempo
+            timerLabel.setText("Tiempo restante: 120");
+            populateButtonPanel(); // Cambiar a botones de zombis
+            timer.restart();
+        } else {
+            timer.stop();
+            JOptionPane.showMessageDialog(this, "¡Fase completada! Ambos jugadores han terminado.");
+        }
+    }
+
+    /**
+     * metodo para poner una imagen de fondo de pantalla
+     */
     private void setScaledBackgroundImage() {
         // Cargar y escalar la imagen para que ocupe toda la ventana
         ImageIcon originalIcon = new ImageIcon(getClass().getResource("/Imagenes/tablero.png")); // Ruta relativa
@@ -147,6 +185,10 @@ public class POOBvsZombiesTablero1vs1 extends JFrame {
         imageLabel.setIcon(new ImageIcon(scaledImage));
     }
 
+    /**
+     * Metodo para poner musica de fondo mientras se juega la partida
+     * @param musicPath
+     */
     private void playNewMusic(String musicPath) {
         try {
             // Obtén el recurso como InputStream desde el classpath
@@ -170,25 +212,6 @@ public class POOBvsZombiesTablero1vs1 extends JFrame {
         }
     }
 
-    public void stopMusic() {
-        if (musicClip != null && musicClip.isRunning()) {
-            musicClip.stop();
-            musicClip.close();
-        }
-    }
-
-    private String getImagePath(String actionCommand) {
-        switch (actionCommand) {
-            case "Acción 1":
-                return "/Imagenes/girasol.png";
-            case "Acción 2":
-                return "/Imagenes/guisante.png";
-            case "Acción 3":
-                return "/Imagenes/papa.png";
-            default:
-                return null;
-        }
-    }
 
     private void showPauseDialog() {
         JDialog settingsDialog = new JDialog(this, "Pausa", true);
@@ -226,12 +249,38 @@ public class POOBvsZombiesTablero1vs1 extends JFrame {
         settingsDialog.setVisible(true);
     }
 
+    /**
+     * metodo constructor para botones
+     * @param text
+     * @return button
+     */
     private JButton createButton(String text) {
         JButton button = new JButton(text);
         button.setBackground(new Color(127, 121, 172));
         button.setForeground(new Color(48, 228, 30));
         button.setFont(new Font("Arial", Font.BOLD, 14));
         return button;
+    }
+
+    /**
+     * Metodo para crear los botones con las imagenes previamente seleccionadas
+     * @param buttonPanel
+     * @param plants
+     */
+    private void addPlantButtons(JPanel buttonPanel, List<String> plants) {
+        Map<String, String> plantImages = Map.of(
+                "girasol", "/Imagenes/girasol.png",
+                "guisante", "/Imagenes/guisante.png",
+                "papa", "/Imagenes/papa.png",
+                "patata", "/Imagenes/patata.png",
+                "POOBPlanta", "/Imagenes/POOBplanta.png"
+        );
+
+        for (String plant : plants) {
+            if (plantImages.containsKey(plant)) {
+                addImageButton(buttonPanel, plantImages.get(plant), plant);
+            }
+        }
     }
 
     private JPanel createContentPanel() {
@@ -263,6 +312,12 @@ public class POOBvsZombiesTablero1vs1 extends JFrame {
         return contentPanel;
     }
 
+    /**
+     * Metodo para poder agregar imagenes como botones
+     * @param panel
+     * @param imagePath
+     * @param actionCommand
+     */
     private void addImageButton(JPanel panel, String imagePath, String actionCommand) {
         try {
             // Crear el botón con la imagen como ícono
@@ -329,9 +384,12 @@ public class POOBvsZombiesTablero1vs1 extends JFrame {
 
     private Clip clip;
 
+    /**
+     * Metodo para poner musica de fondo (toca eliminar uno de los dos)
+     * @param resourcePath
+     */
     public void playBackgroundMusic(String resourcePath) {
         try {
-            // Obtén el recurso como InputStream desde el classpath
             InputStream audioSrc = getClass().getResourceAsStream(resourcePath);
             if (audioSrc == null) {
                 System.err.println("Error: No se encontró el recurso: " + resourcePath);
@@ -353,7 +411,9 @@ public class POOBvsZombiesTablero1vs1 extends JFrame {
     }
 
 
-    // Detener música de fondo
+    /**
+     * Metodo para detener la musica de fondo
+     */
     private void stopBackgroundMusic() {
         if (clip != null && clip.isRunning()) {
             clip.stop();
@@ -374,6 +434,9 @@ public class POOBvsZombiesTablero1vs1 extends JFrame {
         }
     }
 
+    /**
+     * metodo para volver al menu
+     */
     private void goToMenu() {
         stopBackgroundMusic();
         POOBvsZombiesGUI menu = new POOBvsZombiesGUI();
@@ -381,14 +444,20 @@ public class POOBvsZombiesTablero1vs1 extends JFrame {
         dispose();
     }
 
+    /**
+     * metodo para abrir panel de configuración
+     */
     private void showConfigurationDialog() {
         JPanel contentPanel = createContentPanel();
         JOptionPane.showMessageDialog(this, contentPanel, "Configuración", JOptionPane.PLAIN_MESSAGE);
     }
 
+    /**
+     * metodo para resetear la partida
+     */
     private void resetGame() {
-        POOBvsZombiesChoosePlants plantas = new POOBvsZombiesChoosePlants(clip);
-        plantas.setVisible(true);
+        POOBvsZombiesChoosePvsP pz = new POOBvsZombiesChoosePvsP(clip);
+        pz.setVisible(true);
         dispose();
     }
 }

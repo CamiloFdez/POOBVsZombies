@@ -65,7 +65,7 @@ public class POOBVsZombiesMenu1 extends JFrame {
             }
         });
 
-        playBackgroundMusic("/musica/menu_theme.wav");
+        playBackgroundMusic("/musica/menuTheme.wav");
 
         setVisible(true);
     }

@@ -139,7 +139,9 @@ public class POOBvsZombiesTablero extends JFrame {
         });
     }
 
-
+    /**
+     * Metodo para poner una imagen como fondo
+     */
     private void setScaledBackgroundImage() {
         // Cargar y escalar la imagen para que ocupe toda la ventana
         ImageIcon originalIcon = new ImageIcon(getClass().getResource("/Imagenes/tablero.png")); // Ruta relativa
@@ -147,6 +149,10 @@ public class POOBvsZombiesTablero extends JFrame {
         imageLabel.setIcon(new ImageIcon(scaledImage));
     }
 
+    /**
+     * Metodo para poner nueva musica de fondo
+     * @param musicPath
+     */
     private void playNewMusic(String musicPath) {
         try {
             // Obtén el recurso como InputStream desde el classpath
@@ -170,26 +176,9 @@ public class POOBvsZombiesTablero extends JFrame {
         }
     }
 
-    public void stopMusic() {
-        if (musicClip != null && musicClip.isRunning()) {
-            musicClip.stop();
-            musicClip.close();
-        }
-    }
-
-    private String getImagePath(String actionCommand) {
-        switch (actionCommand) {
-            case "Acción 1":
-                return "/Imagenes/girasol.png";
-            case "Acción 2":
-                return "/Imagenes/guisante.png";
-            case "Acción 3":
-                return "/Imagenes/papa.png";
-            default:
-                return null;
-        }
-    }
-
+    /**
+     * Metodo para la creacion del boton pausa
+     */
     private void showPauseDialog() {
         JDialog settingsDialog = new JDialog(this, "Pausa", true);
         settingsDialog.setLayout(new BorderLayout());
@@ -226,6 +215,11 @@ public class POOBvsZombiesTablero extends JFrame {
         settingsDialog.setVisible(true);
     }
 
+    /**
+     * Metodo constructor para crear un boton
+     * @param text
+     * @return button
+     */
     private JButton createButton(String text) {
         JButton button = new JButton(text);
         button.setBackground(new Color(127, 121, 172));
@@ -234,6 +228,10 @@ public class POOBvsZombiesTablero extends JFrame {
         return button;
     }
 
+    /**
+     * Metodo constructor para crear un panel
+     * @return JPanel
+     */
     private JPanel createContentPanel() {
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
@@ -263,6 +261,12 @@ public class POOBvsZombiesTablero extends JFrame {
         return contentPanel;
     }
 
+    /**
+     * Matodo para crear una imagen como boton con acción
+     * @param panel
+     * @param imagePath
+     * @param actionCommand
+     */
     private void addImageButton(JPanel panel, String imagePath, String actionCommand) {
         try {
             // Crear el botón con la imagen como ícono
@@ -301,7 +305,10 @@ public class POOBvsZombiesTablero extends JFrame {
         }
     }
 
-    // Alternar música según el estado del JCheckBox
+    /**
+     * Metodo para alternar musica segun el estado del JCheckBox
+     * @param playMusic
+     */
     public void toggleMusic(boolean playMusic) {
         if (playMusic) {
             playBackgroundMusic("/musica/musicaTablero.wav");
@@ -329,6 +336,10 @@ public class POOBvsZombiesTablero extends JFrame {
 
     private Clip clip;
 
+    /**
+     * Metodo para poner musica de fondo
+     * @param resourcePath
+     */
     public void playBackgroundMusic(String resourcePath) {
         try {
             // Obtén el recurso como InputStream desde el classpath
@@ -353,7 +364,9 @@ public class POOBvsZombiesTablero extends JFrame {
     }
 
 
-    // Detener música de fondo
+    /**
+     * Metodo para detener musica de fondo
+     */
     private void stopBackgroundMusic() {
         if (clip != null && clip.isRunning()) {
             clip.stop();
@@ -374,6 +387,9 @@ public class POOBvsZombiesTablero extends JFrame {
         }
     }
 
+    /**
+     * Metodo para regresar al menu de la aplicación
+     */
     private void goToMenu() {
         stopBackgroundMusic();
         POOBvsZombiesGUI menu = new POOBvsZombiesGUI();
@@ -381,11 +397,17 @@ public class POOBvsZombiesTablero extends JFrame {
         dispose();
     }
 
+    /**
+     * Metodo para mostrar panel de configuracion
+     */
     private void showConfigurationDialog() {
         JPanel contentPanel = createContentPanel();
         JOptionPane.showMessageDialog(this, contentPanel, "Configuración", JOptionPane.PLAIN_MESSAGE);
     }
 
+    /**
+     * metodo para reiniciar la partida
+     */
     private void resetGame() {
         POOBvsZombiesChoosePlants plantas = new POOBvsZombiesChoosePlants(clip);
         plantas.setVisible(true);

@@ -142,12 +142,28 @@ public class POOBvsZombiesGUI extends JFrame {
 
                 if (selectedButton.getActionCommand().equals("PvsP")) {
                     // Acción para "PvsP"
-                    POOBvsZombiesChoosePlants tablero = new POOBvsZombiesChoosePlants(clip);
+                    POOBvsZombiesChoosePvsP tablero = new POOBvsZombiesChoosePvsP(clip);
                     tablero.setVisible(true);
+
                 } else if (selectedButton.getActionCommand().equals("PvsM")) {
                     // Acción para "PvsM"
-                    POOBvsZombiesChoosePlants tablero = new POOBvsZombiesChoosePlants(clip);
-                    tablero.setVisible(true);
+                    String[] options = {"Fácil", "Normal", "Difícil"};
+                    int choice = JOptionPane.showOptionDialog(
+                            null,
+                            "Selecciona la dificultad:",
+                            "Dificultad",
+                            JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            options,
+                            options[1]
+                    );
+                    if (choice >= 0) {
+                        String dificultadSeleccionada = options[choice];
+                        POOBvsZombiesChoosePlants tablero = new POOBvsZombiesChoosePlants(clip);
+                        tablero.setVisible(true);
+                    }
+
                 } else if (selectedButton.getActionCommand().equals("MvsM")) {
                     // Acción para "MvsM"
                     POOBvsZombiesChoosePlants tablero = new POOBvsZombiesChoosePlants(clip);
@@ -160,7 +176,9 @@ public class POOBvsZombiesGUI extends JFrame {
         });
     }
 
-    // Método para confirmar la salida al hacer clic en el botón "Salir"
+    /**
+     * Metodo para confirmar la salida al dar clic en exit
+     */
     private void confirmExit() {
         int opcion = JOptionPane.showConfirmDialog(
                 POOBvsZombiesGUI.this,
@@ -174,7 +192,9 @@ public class POOBvsZombiesGUI extends JFrame {
         }
     }
 
-    // Mostrar cuadro de diálogo para configurar música y tamaño
+    /**
+     * Metodo para mostrar cuadro de diálogo para configurar música y tamaño
+     */
     private void showSettingsDialog() {
         JDialog settingsDialog = new JDialog(this, "Configuración", true);
         settingsDialog.setLayout(new BorderLayout());
@@ -228,6 +248,10 @@ public class POOBvsZombiesGUI extends JFrame {
     private Clip clip;
     private boolean isMusicPlaying = false;
 
+    /**
+     * Metodo para poner musica de fondo
+     * @param resourcePath
+     */
     public void playBackgroundMusic(String resourcePath) {
         try {
             // Obtén el recurso como InputStream desde el classpath
@@ -251,7 +275,9 @@ public class POOBvsZombiesGUI extends JFrame {
         }
     }
 
-    // Detener música de fondo
+    /**
+     * Metodo para detener musica de fondo
+     */
     private void stopBackgroundMusic() {
         if (clip != null && clip.isRunning()) {
             clip.stop();
@@ -260,7 +286,10 @@ public class POOBvsZombiesGUI extends JFrame {
         isMusicPlaying = false;
     }
 
-    // Alternar música según el estado del JCheckBox
+    /**
+     * Metodo para alternar música según el estado del JCheckBox
+     * @param playMusic
+     */
     public void toggleMusic(boolean playMusic) {
         if (playMusic) {
             playBackgroundMusic("/musica/menuTheme.wav");
@@ -269,7 +298,10 @@ public class POOBvsZombiesGUI extends JFrame {
         }
     }
 
-    // Alternar pantalla completa
+    /**
+     * Metodo para alternar pantalla completa
+     * @param fullScreen
+     */
     public void toggleFullScreen(boolean fullScreen) {
         if (fullScreen) {
             setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -289,7 +321,12 @@ public class POOBvsZombiesGUI extends JFrame {
 
     private JButton selectedButton = null;
 
-    // Método para añadir un botón de imagen con lógica de selección
+    /**
+     * Método para añadir un botón de imagen con lógica de selección
+     * @param panel
+     * @param imagePath
+     * @param actionCommand
+     */
     private void addImageButton(JPanel panel, String imagePath, String actionCommand) {
         JButton button = new JButton(new ImageIcon(getClass().getResource(imagePath)));
         button.setActionCommand(actionCommand);
