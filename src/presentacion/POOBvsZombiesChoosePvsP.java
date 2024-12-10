@@ -126,7 +126,7 @@ public class POOBvsZombiesChoosePvsP extends JFrame {
      */
     private void addPlantButtons(JPanel panel) {
         addImageButton(panel, "/Imagenes/Cgirasol.png", "girasol", selectedPlants);
-        addImageButton(panel, "/Imagenes/Cguisante.png", "Cuisante", selectedPlants);
+        addImageButton(panel, "/Imagenes/Cguisante.png", "guisante", selectedPlants);
         addImageButton(panel, "/Imagenes/Cpapa.png", "papa", selectedPlants);
         addImageButton(panel, "/Imagenes/Cpatata.png", "patata", selectedPlants);
         addImageButton(panel, "/Imagenes/CPOOBPlanta.png", "POOBPlanta", selectedPlants);

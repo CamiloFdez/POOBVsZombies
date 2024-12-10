@@ -20,6 +20,7 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
     private JButton menuButton;
     private JButton confButton;
     private JButton resetButton;
+    private JButton saveButton;
     private Timer timer;
     private JLabel timerLabel;
     private int remainingTime = 120;
@@ -44,6 +45,7 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
         menuButton = createButton("Menú");
         confButton = createButton("Configuración");
         resetButton = createButton("Reiniciar");
+        saveButton = createButton("Guardar");
 
         // Configuración general de la ventana
         setSize(Toolkit.getDefaultToolkit().getScreenSize().width / 2,
@@ -235,6 +237,8 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
         menuPanel.add(confButton);
         menuPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         menuPanel.add(resetButton);
+        menuPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        menuPanel.add(saveButton);
         menuPanel.add(Box.createVerticalGlue()); // Agrega espacio al final
 
 
@@ -390,7 +394,7 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
     private Clip clip;
 
     /**
-     * Metodo para poner musica de fondo
+     * Metodo para poner musica de fondox
      * @param resourcePath
      */
     public void playBackgroundMusic(String resourcePath) {
@@ -437,6 +441,9 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
         if (resetButton != null) {
             resetButton.addActionListener(e -> resetGame());
         }
+        if (saveButton != null) {
+            saveButton.addActionListener((e -> saveGame()));
+        }
     }
 
     /**
@@ -464,5 +471,37 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
         POOBvsZombiesChoosePvsP pz = new POOBvsZombiesChoosePvsP(clip);
         pz.setVisible(true);
         dispose();
+    }
+
+    /**
+     * Metodo que permite guardar la partida creando un .dat y guardandolo
+     * en la ubiacion seleccionada
+     */
+    private void saveGame() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar Partida");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        int userSelection = fileChooser.showSaveDialog(null);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+            if (!filePath.endsWith(".dat")) {
+                filePath += ".dat"; // Asegurarse de que el archivo tenga la extensión .dat
+            }
+
+            try {
+                // Crear un objeto GameState con los datos actuales
+                GameState gameState = new GameState(selectedPlants, selectedZombies, "/musica/musicaTablero.wav");
+
+                // Guardar el estado del juego
+                GameDataManager.guardarPartida(filePath, gameState);
+
+                JOptionPane.showMessageDialog(null, "Partida guardada exitosamente en: " + filePath);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Error al guardar la partida: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+        }
     }
 }

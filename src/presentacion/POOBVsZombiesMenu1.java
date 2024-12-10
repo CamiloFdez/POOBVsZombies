@@ -84,13 +84,22 @@ public class POOBVsZombiesMenu1 extends JFrame {
                         // Cargar la partida
                         GameState partida = GameDataManager.cargarPartida(selectedFile.getAbsolutePath());
 
-                        // Crear la nueva instancia de POOBvsZombiesTablero con los datos cargados
+                        // Obtener los datos del estado del juego
                         List<String> selectedPlants = partida.getSelectedPlants();
+                        List<String> selectedZombies = partida.getSelectedZombies();
                         String musicPath = partida.getCurrentMusicPath();
                         Clip currentMusic = null;
 
-                        POOBvsZombiesTablero tablero = new POOBvsZombiesTablero(currentMusic, selectedPlants);
-                        tablero.setVisible(true);
+                        // Verificar si hay zombies seleccionados
+                        if (selectedZombies != null && !selectedZombies.isEmpty()) {
+                            // Crear instancia de POOBvsZombiesTableroPvsP
+                            POOBvsZombiesTableroPvsP tableroPvsP = new POOBvsZombiesTableroPvsP(currentMusic, selectedZombies, selectedPlants);
+                            tableroPvsP.setVisible(true);
+                        } else {
+                            // Crear instancia de POOBvsZombiesTablero
+                            POOBvsZombiesTablero tablero = new POOBvsZombiesTablero(currentMusic, selectedPlants);
+                            tablero.setVisible(true);
+                        }
 
                     } catch (IOException | ClassNotFoundException ex) {
                         JOptionPane.showMessageDialog(null, "Error al cargar la partida: " + ex.getMessage());
