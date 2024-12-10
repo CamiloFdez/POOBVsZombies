@@ -181,7 +181,7 @@ public class POOBvsZombiesChoosePlants extends JFrame {
         JButton button = new JButton(new ImageIcon(getClass().getResource(imagePath)));
         button.setActionCommand(actionCommand);
         button.setBackground(new Color(111, 64, 48)); // Color base
-        button.setBorderPainted(false); // Sin bordes
+        button.setBorder(BorderFactory.createEmptyBorder()); // Sin borde inicial
         button.setFocusPainted(false); // Sin borde de enfoque
         button.setContentAreaFilled(true);
 
@@ -190,20 +190,22 @@ public class POOBvsZombiesChoosePlants extends JFrame {
 
         // Acción del botón
         button.addActionListener(e -> {
-            // Obtener el estado actual del boton
+            // Obtener el estado actual del botón
             boolean isIlluminated = (boolean) button.getClientProperty("illuminated");
 
             if (isIlluminated) {
-                // Restaurar el color original si ya está iluminado
-                button.setBackground(new Color(111, 64, 48)); // Color original
+                // Quitar el borde si ya está iluminado
+                button.setBorder(BorderFactory.createEmptyBorder());
                 button.putClientProperty("illuminated", false);
                 selectedButtons.remove(actionCommand);  // Eliminar de la lista
             } else {
-                button.setBackground(new Color(219, 195, 54)); // Color iluminado
+                // Añadir un borde si está seleccionado
+                button.setBorder(BorderFactory.createLineBorder(new Color(219, 195, 54), 5)); // Borde dorado
                 button.putClientProperty("illuminated", true);
                 selectedButtons.add(actionCommand); // Añadir a la lista
             }
         });
+
         panel.add(button);
     }
 }

@@ -143,22 +143,27 @@ public class POOBvsZombiesChoosePvsP extends JFrame {
     private void addImageButton(JPanel panel, String imagePath, String actionCommand, List<String> selectionList) {
         JButton button = new JButton(new ImageIcon(getClass().getResource(imagePath)));
         button.setActionCommand(actionCommand);
-        button.setBackground(new Color(111, 64, 48));
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
+        button.setBackground(new Color(111, 64, 48)); // Color base
+        button.setBorder(BorderFactory.createEmptyBorder()); // Sin borde inicial
+        button.setFocusPainted(false); // Sin borde de enfoque
         button.setContentAreaFilled(true);
 
+        // Propiedad personalizada para almacenar el estado de selección
         button.putClientProperty("selected", false);
+
+        // Acción del botón
         button.addActionListener(e -> {
             boolean isSelected = (boolean) button.getClientProperty("selected");
             if (isSelected) {
-                button.setBackground(new Color(111, 64, 48));
+                // Quitar el borde si el botón está seleccionado
+                button.setBorder(BorderFactory.createEmptyBorder());
                 button.putClientProperty("selected", false);
-                selectionList.remove(actionCommand);
+                selectionList.remove(actionCommand); // Eliminar de la lista
             } else {
-                button.setBackground(new Color(73, 101, 48));
+                // Añadir borde al seleccionar
+                button.setBorder(BorderFactory.createLineBorder(new Color(219, 195, 54), 5)); // Borde verde oscuro
                 button.putClientProperty("selected", true);
-                selectionList.add(actionCommand);
+                selectionList.add(actionCommand); // Añadir a la lista
             }
         });
 
