@@ -94,10 +94,12 @@ public class POOBVsZombiesMenu1 extends JFrame {
                         if (selectedZombies != null && !selectedZombies.isEmpty()) {
                             // Crear instancia de POOBvsZombiesTableroPvsP
                             POOBvsZombiesTableroPvsP tableroPvsP = new POOBvsZombiesTableroPvsP(currentMusic, selectedZombies, selectedPlants);
+                            ((JFrame) SwingUtilities.getWindowAncestor(loadGameButton)).dispose();
                             tableroPvsP.setVisible(true);
                         } else {
                             // Crear instancia de POOBvsZombiesTablero
                             POOBvsZombiesTablero tablero = new POOBvsZombiesTablero(currentMusic, selectedPlants);
+                            ((JFrame) SwingUtilities.getWindowAncestor(loadGameButton)).dispose();
                             tablero.setVisible(true);
                         }
 
