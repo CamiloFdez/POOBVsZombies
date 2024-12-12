@@ -23,7 +23,7 @@ public class SunManager {
     public void addSuns(int puntos) {
         totalSunPoints += puntos;
         if (sunCounterLabel != null) {
-            sunCounterLabel.setText("Soles: " + totalSunPoints);
+            sunCounterLabel.setText("" + totalSunPoints);
         }
     }
 }

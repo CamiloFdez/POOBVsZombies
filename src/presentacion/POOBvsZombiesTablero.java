@@ -36,8 +36,13 @@ public class POOBvsZombiesTablero extends JFrame {
         if (currentMusic != null && currentMusic.isRunning()) {
             currentMusic.stop();
         }
-        sunCounterLabel = new JLabel("Soles: 0");
-        sunCounterLabel.setForeground(Color.BLACK);
+
+        ImageIcon backsoles = new ImageIcon(getClass().getResource("/Imagenes/soles.png"));
+        sunCounterLabel = new JLabel("0");
+        sunCounterLabel.setIcon(backsoles);
+        sunCounterLabel.setHorizontalTextPosition(JLabel.CENTER);
+        sunCounterLabel.setVerticalTextPosition(JLabel.CENTER);
+        sunCounterLabel.setForeground(new Color(0, 0, 0));
         sunCounterLabel.setFont(new Font("Serif", Font.BOLD, 25));
         sunCounterLabel.setHorizontalAlignment(SwingConstants.CENTER);
         SunManager.getInstance().setSunCounterLabel(sunCounterLabel);
