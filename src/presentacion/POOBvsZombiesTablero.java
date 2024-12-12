@@ -148,27 +148,27 @@ public class POOBvsZombiesTablero extends JFrame {
                 // Verificar si hay una acción seleccionada
                 if (selectedAction != null) {
                     if (selectedAction.equals("Acción 1")) { // Girasol
-                        colocarPlantaVisual(row, col, "/Imagenes/girasol.png");
+                        colocarPlantaVisual(row, col, "/Imagenes/Tgirasol.png");
                         Girasol girasol = new Girasol();
                         girasol.performPassiveAction(); // Inicia generación de soles
                         tableroDominio[row][col] = girasol;
                     } else if (selectedAction.equals("Acción 2")) {
-                        colocarPlantaVisual(row, col, "/Imagenes/guisante.png");
+                        colocarPlantaVisual(row, col, "/Imagenes/Tguisante.png");
                         Guisante guisante = new Guisante();
                         guisante.performAction();
                         tableroDominio[row][col] = guisante;
                     } else if (selectedAction.equals("Acción 3")) {
-                        colocarPlantaVisual(row, col, "/Imagenes/papa.png");
+                        colocarPlantaVisual(row, col, "/Imagenes/Tpapa.png");
                         Nuez nuez = new Nuez();
                         nuez.performPassiveAction();
                         tableroDominio[row][col] = nuez;
                     } else if (selectedAction.equals("Accion 4")) {
-                        colocarPlantaVisual(row, col, "/Imagenes/patata.png");
+                        colocarPlantaVisual(row, col, "/Imagenes/Tpatata.png");
                         PapaExplosiva patata = new PapaExplosiva();
                         patata.performAction();
                         tableroDominio[row][col] = patata;
                     } else if (selectedAction.equals("Accion 5")) {
-                        colocarPlantaVisual(row, col, "/Imagenes/POOBplanta.png");
+                        colocarPlantaVisual(row, col, "/Imagenes/TPOOBplanta.png");
                         ECIPlant Eplant = new ECIPlant();
                         Eplant.performPassiveAction();
                         tableroDominio[row][col] = Eplant;
