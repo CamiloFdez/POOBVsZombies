@@ -100,4 +100,30 @@ public class Tablero {
             System.out.println();
         }
     }
+
+    /**
+     * Verifica si hay una planta en la posición especificada.
+     *
+     * @param fila    Fila de la posición a verificar.
+     * @param columna Columna de la posición a verificar.
+     * @return true si hay una planta, false de lo contrario.
+     */
+    public boolean isPlantAt(int fila, int columna) {
+        return esPosicionValida(fila, columna) && celdas[fila][columna] instanceof Planta;
+    }
+
+    /**
+     * Elimina la entidad en la posición especificada del tablero.
+     *
+     * @param fila    Fila de la posición de la entidad a eliminar.
+     * @param columna Columna de la posición de la entidad a eliminar.
+     * @return true si la entidad fue eliminada, false si no había entidad en esa posición.
+     */
+    public boolean removeEntity(int fila, int columna) {
+        if (esPosicionValida(fila, columna) && celdas[fila][columna] != null) {
+            celdas[fila][columna] = null;
+            return true;
+        }
+        return false;
+    }
 }
