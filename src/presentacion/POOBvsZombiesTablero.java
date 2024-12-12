@@ -1,5 +1,7 @@
 package presentacion;
 
+import dominio.*;
+
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +21,12 @@ public class POOBvsZombiesTablero extends JFrame {
     private JButton confButton;
     private JButton resetButton;
     private JButton saveButton;
+    private String selectedAction = null; // Acción seleccionada
+    private Planta[][] tableroDominio = new Planta[5][9]; // Matriz de plantas en el dominio
+    private JLabel sunCounterLabel;
+    private int totalSunPoints = 0;
+
+
 
 
     public POOBvsZombiesTablero(Clip currentMusic, List<String> selectedPlants) {
@@ -28,6 +36,11 @@ public class POOBvsZombiesTablero extends JFrame {
         if (currentMusic != null && currentMusic.isRunning()) {
             currentMusic.stop();
         }
+        sunCounterLabel = new JLabel("Soles: 0");
+        sunCounterLabel.setForeground(Color.BLACK);
+        sunCounterLabel.setFont(new Font("Serif", Font.BOLD, 25));
+        sunCounterLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        SunManager.getInstance().setSunCounterLabel(sunCounterLabel);
         prepareElements();
         prepareActions();
         playNewMusic("/musica/musicaTablero.wav"); // Ruta al archivo de música nuevo
@@ -59,12 +72,13 @@ public class POOBvsZombiesTablero extends JFrame {
         imageLabel.setBounds(0, 0, getWidth(), getHeight()); // Ajustar el tamaño al panel
         layeredPane.add(imageLabel, JLayeredPane.DEFAULT_LAYER); // Añadir al nivel base
 
-        // Panel para los botones de plantas y pala
+        // Panel para los botones de plantas
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10)); // Alinear a la izquierda
         buttonPanel.setOpaque(false); // Hacer transparente
         buttonPanel.setBounds(0, 0, getWidth(), 70); // Posición en la parte superior
         buttonPanel.setBackground(new Color(111, 64, 48));
+
 
         // Panel para el boton de pausa
         JPanel pausePanel = new JPanel();
@@ -72,6 +86,8 @@ public class POOBvsZombiesTablero extends JFrame {
         pausePanel.setOpaque(false); // Hacer transparente
         pausePanel.setBounds(-10, 0, getWidth(), 70); // Posición en la parte superior
 
+        // Añadir contador de soles
+        pausePanel.add(sunCounterLabel);
         // Añadir pala al panel
         addImageButton(pausePanel, "/Imagenes/pala.png", "Acción 6");
 
@@ -121,14 +137,60 @@ public class POOBvsZombiesTablero extends JFrame {
                 // Obtener las coordenadas del clic
                 int x = e.getX();
                 int y = e.getY();
+                int row = y / (getHeight() / 5);
+                int col = x / (getWidth() / 9);
 
-                // Convertir las coordenadas del clic en las celdas de la cuadrícula 5x9
-                int row = y / (getHeight() / 5); // Dividir la altura de la ventana entre las 5 filas
-                int col = x / (getWidth() / 9); // Dividir el ancho de la ventana entre las 9 columnas
-
-                System.out.println("Clic en la celda: (" + row + ", " + col + ")");
+                // Verificar si hay una acción seleccionada
+                if (selectedAction != null) {
+                    if (selectedAction.equals("Acción 1")) { // Girasol
+                        colocarPlantaVisual(row, col, "/Imagenes/girasol.png");
+                        Girasol girasol = new Girasol();
+                        girasol.performPassiveAction(); // Inicia generación de soles
+                        tableroDominio[row][col] = girasol;
+                    } else if (selectedAction.equals("Acción 2")) {
+                        colocarPlantaVisual(row, col, "/Imagenes/guisante.png");
+                        Guisante guisante = new Guisante();
+                        guisante.performAction();
+                        tableroDominio[row][col] = guisante;
+                    } else if (selectedAction.equals("Acción 3")) {
+                        colocarPlantaVisual(row, col, "/Imagenes/papa.png");
+                        Nuez nuez = new Nuez();
+                        nuez.performPassiveAction();
+                        tableroDominio[row][col] = nuez;
+                    } else if (selectedAction.equals("Accion 4")) {
+                        colocarPlantaVisual(row, col, "/Imagenes/patata.png");
+                        PapaExplosiva patata = new PapaExplosiva();
+                        patata.performAction();
+                        tableroDominio[row][col] = patata;
+                    } else if (selectedAction.equals("Accion 5")) {
+                        colocarPlantaVisual(row, col, "/Imagenes/POOBplanta.png");
+                        ECIPlant Eplant = new ECIPlant();
+                        Eplant.performPassiveAction();
+                        tableroDominio[row][col] = Eplant;
+                    }
+                    // Limpiar la acción seleccionada
+                    selectedAction = null;
+                }
             }
         });
+    }
+
+    /**
+     * Metodo que se encarga de colocar la imagen la planta seleccionada en el tablero
+     * @param row
+     * @param col
+     * @param imagePath
+     */
+    private void colocarPlantaVisual(int row, int col, String imagePath) {
+        JLabel plantaLabel = new JLabel(new ImageIcon(getClass().getResource(imagePath)));
+        plantaLabel.setBounds(col * (getWidth() / 9), row * (getHeight() / 5), getWidth() / 9, getHeight() / 5);
+        imageLabel.add(plantaLabel);
+        imageLabel.repaint();
+    }
+
+    public  void actualizarSoles(int puntos) {
+        totalSunPoints += puntos;
+        sunCounterLabel.setText("Soles: " + totalSunPoints);
     }
 
     /**
@@ -271,7 +333,6 @@ public class POOBvsZombiesTablero extends JFrame {
             if (imageUrl != null) {
                 ImageIcon originalIcon = new ImageIcon(imageUrl);
 
-                // Escalar la imagen al tamaño deseado (ejemplo: 70x70 píxeles)
                 int buttonSize = 67;
                 Image scaledImage = originalIcon.getImage().getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH);
                 ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -287,6 +348,7 @@ public class POOBvsZombiesTablero extends JFrame {
                 button.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        selectedAction = e.getActionCommand();
                         System.out.println("Botón presionado: " + e.getActionCommand());
                     }
                 });

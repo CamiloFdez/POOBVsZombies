@@ -1,6 +1,10 @@
 package dominio;
 
+import presentacion.POOBvsZombiesTablero;
+
+import javax.swing.*;
 import java.util.*;
+import java.util.Timer;
 
 public class Girasol extends PlantaPasiva {
     public static final int COST = 50;
@@ -32,6 +36,7 @@ public class Girasol extends PlantaPasiva {
     private void generateSun() {
         sunPointsGenerated += 25;
         System.out.println(getName() + " generó 25 soles. Total generado: " + sunPointsGenerated);
+        SunManager.getInstance().addSuns(25);
     }
 
     /**
@@ -43,7 +48,6 @@ public class Girasol extends PlantaPasiva {
             timer = null;
         }
     }
-
     public int getSunPointsGenerated() {
         return sunPointsGenerated;
     }

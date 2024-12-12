@@ -22,7 +22,7 @@ public class ECIPlant extends PlantaPasiva {
      */
     private void generarSolEspecial() {
         System.out.println(getName() + " generó un sol especial de " + SOL_VALOR + " unidades.");
-
+        SunManager.getInstance().addSuns(SOL_VALOR);
     }
 
     public int getCosto() {
