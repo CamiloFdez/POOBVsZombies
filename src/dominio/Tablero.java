@@ -70,7 +70,7 @@ public class Tablero {
      * @param columna Columna a verificar.
      * @return true si la posición es válida, false de lo contrario.
      */
-    private boolean esPosicionValida(int fila, int columna) {
+    public boolean esPosicionValida(int fila, int columna) {
         return fila >= 0 && fila < filas && columna >= 0 && columna < columnas;
     }
 
