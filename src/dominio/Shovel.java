@@ -18,8 +18,12 @@ public class Shovel {
             throw new IllegalArgumentException("El tablero no puede ser nulo.");
         }
 
-        if (tablero.isPlantAt(fila, columna)) { // Método hipotético en Tablero para verificar si hay una planta
-            tablero.removeEntity(fila, columna); // Método hipotético en Tablero para eliminar la entidad
+        if (!tablero.esPosicionValida(fila, columna)) {
+            throw new IllegalArgumentException("La posición (" + fila + ", " + columna + ") es inválida.");
+        }
+
+        if (tablero.isPlantAt(fila, columna)) {
+            tablero.removeEntity(fila, columna);
             System.out.println("Planta removida en la posición (" + fila + ", " + columna + ").");
             return true;
         } else {
@@ -27,5 +31,7 @@ public class Shovel {
             return false;
         }
     }
+
+
 }
 
