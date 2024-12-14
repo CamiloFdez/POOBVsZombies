@@ -47,6 +47,19 @@ public abstract class Planta {
     }
 
     /**
+     * Establece la salud de la planta.
+     *
+     * @param health La nueva salud de la planta.
+     */
+    public void setHealth(int health) {
+        if (health < 0) {
+            this.health = 0;
+        } else {
+            this.health = health;
+        }
+    }
+
+    /**
      * Verifica si la planta está viva.
      * @return true si la planta tiene salud mayor a 0, false si está muerta.
      */
@@ -67,3 +80,4 @@ public abstract class Planta {
      */
     public abstract void performAction();
 }
+

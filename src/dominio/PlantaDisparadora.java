@@ -17,12 +17,21 @@ public abstract class PlantaDisparadora extends Planta {
         return damage;
     }
 
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
     public double getShootInterval() {
         return shootInterval;
     }
 
+    public void setShootInterval(double shootInterval) {
+        this.shootInterval = shootInterval;
+    }
+
     /**
      * Dispara un proyectil que inflige daño al enemigo.
+     *
      * @return la cantidad de daño causado.
      */
     public int shoot() {
@@ -31,4 +40,9 @@ public abstract class PlantaDisparadora extends Planta {
 
     @Override
     public abstract void performAction();
+
+    /**
+     * Lógica que debe ejecutarse cuando la planta muere.
+     */
+    public abstract void onDeath();
 }

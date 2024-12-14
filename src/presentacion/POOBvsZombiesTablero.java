@@ -24,9 +24,8 @@ public class POOBvsZombiesTablero extends JFrame {
     private JButton resetButton;
     private JButton saveButton;
     private String selectedAction = null; // Acción seleccionada
-    private Tablero tableroDominio = new Tablero(5,9); // Matriz de plantas en el dominio
+    private Tablero tableroDominio = new Tablero(5,9);
     private JLabel sunCounterLabel;
-    private int totalSunPoints = 0;
     private Map<String, Action> accionesDisponibles = new HashMap<>();
 
 
@@ -132,6 +131,8 @@ public class POOBvsZombiesTablero extends JFrame {
                 addImageButton(buttonPanel, "/Imagenes/patata.png", "Accion 4");
             } else if (selectedPlants.get(i).equals("Accion 5")) {
                 addImageButton(buttonPanel, "/Imagenes/POOBplanta.png", "Accion 5");
+            } else if (selectedPlants.get(i).equals("Accion 7")){
+                addImageButton(buttonPanel, "/Imagenes/evolution.png", "Accion 7");
             }
         }
 
@@ -183,6 +184,7 @@ public class POOBvsZombiesTablero extends JFrame {
         accionesDisponibles.put("Accion 4", new ColocarPatata(tableroDominio));
         accionesDisponibles.put("Accion 5", new ColocarECIPlant(tableroDominio));
         accionesDisponibles.put("Acción 6", new ShovelAction(tableroDominio));
+        accionesDisponibles.put("Accion 7", new EvolutionAction(tableroDominio));
     }
 
     private Action obtenerAccion(String selectedAction) {
@@ -321,6 +323,64 @@ public class POOBvsZombiesTablero extends JFrame {
             } else {
                 System.out.println("No se puede eliminar el planta");
             }
+        }
+    }
+
+    class EvolutionAction implements Action {
+        private Tablero tableroDominio;
+        public EvolutionAction(Tablero tablero) {
+            this.tableroDominio = tablero;
+        }
+        @Override
+        public void execute(int row, int col) {
+            ECIEvolution evolve = new ECIEvolution();
+            boolean colocada = tableroDominio.colocarPlanta(evolve, row, col);
+            if (colocada) {
+                colocarPlantaVisual(row, col, "/Imagenes/Pevolucion1.png");
+                // Configurar temporizador para evolucionar
+                Timer evolutionTimer = new Timer(15000, null); // Delay inicial de 15 segundos
+                evolutionTimer.addActionListener(new ActionListener() {
+                    private int nivelEvolucion = 1;
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        nivelEvolucion++;
+                        String nuevaImagen = "/Imagenes/Pevolucion" + nivelEvolucion + ".png";
+                        if (nivelEvolucion <= 3) {
+                            actualizarPlantaVisual(row, col, nuevaImagen);
+                            if (nivelEvolucion == 2) {
+                                evolutionTimer.setDelay(20000);
+                            }
+                        } else {
+                            evolutionTimer.stop();
+                        }
+                    }
+                });
+                evolutionTimer.setRepeats(true);
+                evolutionTimer.start();
+            } else {
+                System.err.println("No se pudo colocar la planta en la posición (" + row + ", " + col + ")");
+            }
+        }
+    }
+
+    /**
+     * Metodo que se encarga de actualizar la imagen de la planta en el tablero en caso de que evolucione
+     * @param row
+     * @param col
+     * @param imagePath
+     */
+    private void actualizarPlantaVisual(int row, int col, String imagePath) {
+        int index = row * 9 + col; // Suponiendo un tablero de 5x9
+        JLabel cellLabel = (JLabel) imageLabel.getComponent(index);
+
+        if (cellLabel != null) {
+            ImageIcon plantIcon = new ImageIcon(getClass().getResource(imagePath));
+            cellLabel.setIcon(plantIcon);
+            imageLabel.revalidate();
+            imageLabel.repaint();
+        } else {
+            System.err.println("No se encontró la celda en la posición (" + row + ", " + col + ")");
         }
     }
 

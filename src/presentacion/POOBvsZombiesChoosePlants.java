@@ -66,6 +66,7 @@ public class POOBvsZombiesChoosePlants extends JFrame {
         addImageButton(buttonPanel, "/Imagenes/Cpapa.png", "Acción 3");
         addImageButton(buttonPanel, "/Imagenes/Cpatata.png", "Accion 4");
         addImageButton(buttonPanel, "/Imagenes/CPOOBPlanta.png", "Accion 5");
+        addImageButton(buttonPanel, "/Imagenes/Cevolution.png", "Accion 7");
 
         // Panel para el boton de jugar y volver al menu
         JPanel botPanel = new JPanel();

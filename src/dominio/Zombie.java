@@ -8,7 +8,8 @@ public abstract class Zombie {
     private int health;
     private int damage;
     private double attackInterval;
-    private int costo; // Costo del zombi en cerebros
+    private int costo;
+    private int excessDamage;
 
     /**
      * Constructor para inicializar los atributos básicos de un zombi.
@@ -42,6 +43,20 @@ public abstract class Zombie {
         if (health < 0) {
             health = 0;
         }
+    }
+
+    /**
+     * Reduce la salud del zombi en función del daño recibido.
+     *
+     * @param damage La cantidad de daño recibido.
+     */
+    public void receiveDamage(int damage) {
+        health -= damage; // Reducir la salud por la cantidad de daño
+        System.out.println("Zombie Básico recibió " + damage + " de daño. Salud restante: " + health);
+    }
+
+    public int getExcessDamage() {
+        return excessDamage;
     }
 
     public boolean isAlive() {

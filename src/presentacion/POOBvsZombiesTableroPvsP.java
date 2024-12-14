@@ -1,5 +1,7 @@
 package presentacion;
 
+import dominio.*;
+
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
@@ -7,16 +9,19 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class POOBvsZombiesTableroPvsP extends JFrame {
+    private JLabel sunCounterLabel;
+    private JLabel brainCounterLabel;
     private JLabel imageLabel;
-    private Clip musicClip;
     private List<String> selectedPlants;
     private List<String> selectedZombies;
     private JButton pauseButton;
     private boolean isMusicPlaying = true;
+    private Tablero tableroDominio = new Tablero(5,9 );
     private JButton menuButton;
     private JButton confButton;
     private JButton resetButton;
@@ -26,15 +31,41 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
     private int remainingTime = 120;
     private boolean isPlantsPhase = true;
     private JPanel buttonPanel;
+    private JPanel pausePanel;
+    private String selectedAction = null;
+    private Map<String, Action> accionesDisponibles = new HashMap<>();
 
     public POOBvsZombiesTableroPvsP(Clip currentMusic, List<String> selectedZombies, List<String> selectedPlants) {
         super("POOBvsZombies");
+        accionesDisponibles = new HashMap<>();
+        inicializarAcciones(tableroDominio);
         this.selectedPlants = selectedPlants;
         this.selectedZombies = selectedZombies;
         // Pausar la música actual
         if (currentMusic != null && currentMusic.isRunning()) {
             currentMusic.stop();
         }
+
+        // JLabel para el contador de soles y cerebros
+        ImageIcon backsoles = new ImageIcon(getClass().getResource("/Imagenes/soles.png"));
+        sunCounterLabel = new JLabel("0");
+        sunCounterLabel.setIcon(backsoles);
+        sunCounterLabel.setHorizontalTextPosition(JLabel.CENTER);
+        sunCounterLabel.setVerticalTextPosition(JLabel.CENTER);
+        sunCounterLabel.setForeground(new Color(0, 0, 0));
+        sunCounterLabel.setFont(new Font("Serif", Font.BOLD, 25));
+        sunCounterLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        SunManager.getInstance().setSunCounterLabel(sunCounterLabel);
+        ImageIcon backcerebros = new ImageIcon(getClass().getResource("/Imagenes/cerebros.png"));
+        brainCounterLabel = new JLabel("0");
+        brainCounterLabel.setIcon(backcerebros);
+        brainCounterLabel.setHorizontalTextPosition(JLabel.CENTER);
+        brainCounterLabel.setVerticalTextPosition(JLabel.CENTER);
+        brainCounterLabel.setForeground(new Color(255, 255, 255));
+        brainCounterLabel.setFont(new Font("Serif", Font.BOLD, 25));
+        brainCounterLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        brainManager.getInstance().setBrainCounterLabel(brainCounterLabel);
+
         prepareElements();
         prepareActions();
         playNewMusic("/musica/musicaTablero.wav"); // Ruta al archivo de música nuevo
@@ -59,8 +90,17 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
 
         // Imagen de fondo escalada
         imageLabel = new JLabel();
+        imageLabel.setLayout(new GridLayout(5, 9));
+        for (int i = 0; i < 5; i++) { // 5 filas
+            for (int j = 0; j < 9; j++) { // 9 columnas
+                JLabel cellLabel = new JLabel(); // Crear celda vacía
+                cellLabel.setHorizontalAlignment(SwingConstants.CENTER); // Centrar contenido
+                imageLabel.add(cellLabel); // Añadir al tablero
+            }
+        }
+
         setScaledBackgroundImage();
-        imageLabel.setBounds(0, 0, getWidth(), getHeight()); // Ajustar el tamaño al panel
+        imageLabel.setBounds(0, 0, getWidth(), getHeight());
         layeredPane.add(imageLabel, JLayeredPane.DEFAULT_LAYER); // Añadir al nivel base
 
         // Panel para los botones de plantas, zombies y pala
@@ -71,10 +111,15 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
         buttonPanel.setBackground(new Color(111, 64, 48));
 
         // Panel para el botón de pausa y fase
-        JPanel pausePanel = new JPanel();
+        pausePanel = new JPanel();
         pausePanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         pausePanel.setOpaque(false); // Hacer transparente
         pausePanel.setBounds(0, 0, getWidth(), 70); // Posición en la parte superior
+
+        // Agregar contador de soles y cerebros
+        pausePanel.add(sunCounterLabel);
+        pausePanel.add(brainCounterLabel);
+        brainCounterLabel.setVisible(false);
 
         // Añadir botón de pausa
         pauseButton = createButton("Pausa");
@@ -92,7 +137,7 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
 
         // Etiqueta del temporizador
         timerLabel = new JLabel("Tiempo restante: 120");
-        timerLabel.setForeground(Color.WHITE);
+        timerLabel.setForeground(Color.BLACK);
         pausePanel.add(timerLabel);
 
         // Añadir los paneles a capas superiores
@@ -109,7 +154,6 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
             }
         });
 
-
         // Agregar un MouseListener para detectar clics en el tablero
         imageLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -117,27 +161,319 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
                 // Obtener las coordenadas del clic
                 int x = e.getX();
                 int y = e.getY();
+                int row = y / (getHeight() / 5);
+                int col = x / (getWidth() / 9);
 
-                // Convertir las coordenadas del clic en las celdas de la cuadrícula 5x9
-                int row = y / (getHeight() / 5); // Dividir la altura de la ventana entre las 5 filas
-                int col = x / (getWidth() / 9); // Dividir el ancho de la ventana entre las 9 columnas
-
-                System.out.println("Clic en la celda: (" + row + ", " + col + ")");
+                // Verificar si hay una acción seleccionada
+                if (selectedAction != null) {
+                    Action action = obtenerAccion(selectedAction);
+                    if (action != null) {
+                        action.execute(row, col);
+                    }
+                    selectedAction = null;  // Limpiar la acción seleccionada
+                }
             }
         });
-
         // Temporizador
         remainingTime = 120; // Tiempo inicial
         timer = new Timer(1000, e -> updateTimer()); // Actualización cada segundo
         timer.start(); // Iniciar temporizador
     }
 
+    /**
+     * Metodo que se encarga de inicializar el hashmap que se usa para el manejo de las acciones de las plantas
+     * @param tableroDominio
+     */
+    private void inicializarAcciones(Tablero tableroDominio) {
+        accionesDisponibles.put("girasol", new ColocarGirasol(tableroDominio));
+        accionesDisponibles.put("guisante", new ColocarGuisante(tableroDominio));
+        accionesDisponibles.put("papa", new ColocarNuez(tableroDominio));
+        accionesDisponibles.put("patata", new ColocarPatata(tableroDominio));
+        accionesDisponibles.put("POOBPlanta", new ColocarECIPlant(tableroDominio));
+        accionesDisponibles.put("Acción 6", new ShovelAction(tableroDominio));
+        accionesDisponibles.put("evolve", new EvolutionAction(tableroDominio));
+        accionesDisponibles.put("zombie", new zombieAction(tableroDominio));
+        accionesDisponibles.put("zombieCono", new zombieConoAction(tableroDominio));
+        accionesDisponibles.put("zombieBalde", new zombieBaldeAction(tableroDominio));
+        accionesDisponibles.put("POOBZombie1", new zombieBrainsteinAction(tableroDominio));
+        accionesDisponibles.put("POOBZombie2", new ECIZombieAction(tableroDominio));
+    }
+
+    private Action obtenerAccion(String selectedAction) {
+        return accionesDisponibles.get(selectedAction); // Retorna la acción asociada o null
+    }
+
+    /**
+     * Metodo que se encarga de colocar la imagen de la planta seleccionada en el tablero
+     * @param row
+     * @param col
+     * @param imagePath
+     */
+    private void colocarPlantaVisual(int row, int col, String imagePath) {
+        int index = row * 9 + col; // Suponiendo un tablero de 5x9
+        JLabel cellLabel = (JLabel) imageLabel.getComponent(index);
+
+        if (cellLabel != null) {
+            ImageIcon plantIcon = new ImageIcon(getClass().getResource(imagePath));
+            cellLabel.setIcon(plantIcon);
+            imageLabel.revalidate();
+            imageLabel.repaint();
+        } else {
+            System.err.println("No se encontró la celda en la posición (" + row + ", " + col + ")");
+        }
+    }
+
+    /**
+     * Metodo que se encarga de eliminar la planta de una celda
+     * @param row
+     * @param col
+     */
+    private void eliminarPlantaVisual(int row, int col) {
+        int index = row * 9 + col;  // Convertir coordenadas a índice
+        JLabel cellLabel = (JLabel) imageLabel.getComponent(index);
+        if (cellLabel != null) {
+            cellLabel.setIcon(null);  // Eliminar la imagen de la celda
+            imageLabel.revalidate();
+            imageLabel.repaint();
+        } else {
+            System.err.println("No se encontró la celda en la posición (" + row + ", " + col + ")");
+        }
+    }
+
+    /**
+     * interfaz que dependiendo de la celda ejecuta una accion u otra
+     */
+    interface Action {
+        void execute(int row, int col);
+    }
+
+    class ColocarGirasol implements Action {
+        private Tablero tableroDominio;
+
+        public ColocarGirasol(Tablero tablero) {
+            this.tableroDominio = tablero;
+        }
+
+        @Override
+        public void execute(int row, int col) {
+            Girasol girasol = new Girasol();
+            girasol.performPassiveAction(); // Inicia la acción de generación de soles
+            tableroDominio.colocarPlanta(girasol, row, col);
+            colocarPlantaVisual(row, col, "/Imagenes/Tgirasol.png");
+        }
+    }
+
+    class ColocarGuisante implements Action {
+        private Tablero tableroDominio;
+        public ColocarGuisante(Tablero tablero) {
+            this.tableroDominio = tablero;
+        }
+        @Override
+        public void execute(int row, int col) {
+            Guisante guisante = new Guisante();
+            guisante.performAction();
+            tableroDominio.colocarPlanta(guisante, row, col);
+            colocarPlantaVisual(row, col, "/Imagenes/Tguisante.png");
+        }
+    }
+
+    class ColocarNuez implements Action {
+        private Tablero tableroDominio;
+        public ColocarNuez(Tablero tablero) {
+            this.tableroDominio = tablero;
+        }
+        @Override
+        public void execute(int row, int col) {
+            Nuez nuez = new Nuez();
+            nuez.performAction();
+            tableroDominio.colocarPlanta(nuez, row, col);
+            colocarPlantaVisual(row, col, "/Imagenes/Tpapa.png");
+        }
+    }
+
+    class ColocarPatata implements Action {
+        private Tablero tableroDominio;
+        public ColocarPatata(Tablero tablero) {
+            this.tableroDominio = tablero;
+        }
+        @Override
+        public void execute(int row, int col) {
+            PapaExplosiva patata = new PapaExplosiva();
+            patata.performAction();
+            tableroDominio.colocarPlanta(patata, row, col);
+            colocarPlantaVisual(row, col, "/Imagenes/Tpatata.png");
+        }
+    }
+
+    class ColocarECIPlant implements Action {
+        private Tablero tableroDominio;
+        public ColocarECIPlant(Tablero tablero) {
+            this.tableroDominio = tablero;
+        }
+        @Override
+        public void execute(int row, int col) {
+            ECIPlant ECIPlant = new ECIPlant();
+            ECIPlant.performAction();
+            tableroDominio.colocarPlanta(ECIPlant, row, col);
+            colocarPlantaVisual(row, col, "/Imagenes/TPOOBplanta.png");
+        }
+    }
+
+    class ShovelAction implements Action {
+        private Tablero tableroDominio;
+
+        public ShovelAction(Tablero tablero) {
+            this.tableroDominio = tablero;
+        }
+
+        @Override
+        public void execute(int row, int col) {
+            Shovel shovel = new Shovel();
+            boolean removed = shovel.removePlant(tableroDominio, row, col);
+            if (removed) {
+                eliminarPlantaVisual(row, col);
+            } else {
+                System.out.println("No se puede eliminar el planta");
+            }
+        }
+    }
+
+    class zombieAction implements Action {
+        private Tablero tableroDominio;
+
+        public zombieAction(Tablero tablero) {
+            this.tableroDominio = tablero;
+        }
+        @Override
+        public void execute(int row, int col) {
+            ZombieBasico zombie = new ZombieBasico();
+            zombie.move();
+            tableroDominio.colocarZombie(zombie, row, 8); // Los zombies se colocan automaticamente en al ultima columna
+            colocarPlantaVisual(row, 8, "/Imagenes/Tzombie.png");
+        }
+    }
+
+    class zombieConoAction implements Action {
+        private Tablero tableroDominio;
+        public zombieConoAction(Tablero tablero) {
+            this.tableroDominio = tablero;
+        }
+        @Override
+        public void execute(int row, int col) {
+            ZombieCono zombieC = new ZombieCono();
+            zombieC.move();
+            tableroDominio.colocarZombie(zombieC, row, 8);
+            colocarPlantaVisual(row, 8, "/Imagenes/TzombieC.png");
+        }
+    }
+
+    class zombieBaldeAction implements Action {
+        private Tablero tableroDominio;
+        public zombieBaldeAction(Tablero tablero) {
+            this.tableroDominio = tablero;
+        }
+        @Override
+        public void execute(int row, int col) {
+            ZombieCubeta ZombieBalde = new ZombieCubeta();
+            ZombieBalde.move();
+            tableroDominio.colocarZombie(ZombieBalde, row, 8);
+            colocarPlantaVisual(row, 8, "/Imagenes/TzombieB.png");
+        }
+    }
+
+    class zombieBrainsteinAction implements Action {
+        private Tablero tableroDominio;
+        public zombieBrainsteinAction(Tablero tablero) {
+            this.tableroDominio = tablero;
+        }
+        @Override
+        public void execute(int row, int col) {
+            Brainstein Brainstein = new Brainstein();
+            Brainstein.performPassiveAction();
+            tableroDominio.colocarZombie(Brainstein, row, 8);
+            colocarPlantaVisual(row, 8, "/Imagenes/TPOOBZombie1.png");
+        }
+    }
+
+    class ECIZombieAction implements Action {
+        private Tablero tableroDominio;
+        public ECIZombieAction(Tablero tablero) {
+            this.tableroDominio = tablero;
+        }
+        @Override
+        public void execute(int row, int col) {
+            ECIZombie zombie = new ECIZombie();
+            zombie.move();
+            tableroDominio.colocarZombie(zombie, row, 8);
+            colocarPlantaVisual(row, 8, "/Imagenes/TPOOBZombie2.png");
+        }
+    }
+
+    class EvolutionAction implements Action {
+        private Tablero tableroDominio;
+        public EvolutionAction(Tablero tablero) {
+            this.tableroDominio = tablero;
+        }
+        @Override
+        public void execute(int row, int col) {
+            ECIEvolution evolve = new ECIEvolution();
+            boolean colocada = tableroDominio.colocarPlanta(evolve, row, col);
+            if (colocada) {
+                colocarPlantaVisual(row, col, "/Imagenes/Pevolucion1.png");
+                // Configurar temporizador para evolucionar
+                Timer evolutionTimer = new Timer(15000, null); // Delay inicial de 15 segundos
+                evolutionTimer.addActionListener(new ActionListener() {
+                    private int nivelEvolucion = 1;
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        nivelEvolucion++;
+                        String nuevaImagen = "/Imagenes/Pevolucion" + nivelEvolucion + ".png";
+                        if (nivelEvolucion <= 3) {
+                            actualizarPlantaVisual(row, col, nuevaImagen);
+                            if (nivelEvolucion == 2) {
+                                evolutionTimer.setDelay(20000);
+                            }
+                        } else {
+                            evolutionTimer.stop();
+                        }
+                    }
+                });
+                evolutionTimer.setRepeats(true);
+                evolutionTimer.start();
+            } else {
+                System.err.println("No se pudo colocar la planta en la posición (" + row + ", " + col + ")");
+            }
+        }
+    }
+
+    /**
+     * Metodo que se encarga de actualizar la imagen de la planta en el tablero en caso de que evolucione
+     * @param row
+     * @param col
+     * @param imagePath
+     */
+    private void actualizarPlantaVisual(int row, int col, String imagePath) {
+        int index = row * 9 + col; // Suponiendo un tablero de 5x9
+        JLabel cellLabel = (JLabel) imageLabel.getComponent(index);
+
+        if (cellLabel != null) {
+            ImageIcon plantIcon = new ImageIcon(getClass().getResource(imagePath));
+            cellLabel.setIcon(plantIcon);
+            imageLabel.revalidate();
+            imageLabel.repaint();
+        } else {
+            System.err.println("No se encontró la celda en la posición (" + row + ", " + col + ")");
+        }
+    }
 
     /**
      * Metodo para cambiar entre la ubicacion de plantas y zombies
      */
     private void populateButtonPanel() {
         buttonPanel.removeAll(); // Limpiar botones previos
+        sunCounterLabel.setVisible(isPlantsPhase);
+        brainCounterLabel.setVisible(!isPlantsPhase);
         List<String> items = isPlantsPhase ? selectedPlants : selectedZombies;
         String basePath = "/Imagenes/";
         for (String item : items) {
@@ -146,6 +482,8 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
         }
         buttonPanel.revalidate();
         buttonPanel.repaint();
+        pausePanel.revalidate();
+        pausePanel.repaint();
     }
 
 
@@ -279,7 +617,8 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
                 "guisante", "/Imagenes/guisante.png",
                 "papa", "/Imagenes/papa.png",
                 "patata", "/Imagenes/patata.png",
-                "POOBPlanta", "/Imagenes/POOBplanta.png"
+                "POOBPlanta", "/Imagenes/POOBplanta.png",
+                "evolve", "/Imagenes/evolution.png"
         );
 
         for (String plant : plants) {
@@ -347,6 +686,7 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
                 button.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        selectedAction = e.getActionCommand();
                         System.out.println("Botón presionado: " + e.getActionCommand());
                     }
                 });

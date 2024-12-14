@@ -130,6 +130,7 @@ public class POOBvsZombiesChoosePvsP extends JFrame {
         addImageButton(panel, "/Imagenes/Cpapa.png", "papa", selectedPlants);
         addImageButton(panel, "/Imagenes/Cpatata.png", "patata", selectedPlants);
         addImageButton(panel, "/Imagenes/CPOOBPlanta.png", "POOBPlanta", selectedPlants);
+        addImageButton(panel, "/Imagenes/Cevolution.png", "evolve", selectedPlants);
     }
 
 
