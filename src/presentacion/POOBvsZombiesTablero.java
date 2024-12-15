@@ -300,9 +300,9 @@ public class POOBvsZombiesTablero extends JFrame {
         }
         @Override
         public void execute(int row, int col) {
-            ECIPlant ECIPlant = new ECIPlant();
-            ECIPlant.performAction();
-            tableroDominio.colocarPlanta(ECIPlant, row, col);
+            ECIPlant eCIPlant = new ECIPlant();
+            eCIPlant.performAction();
+            tableroDominio.colocarPlanta(eCIPlant, row, col);
             colocarPlantaVisual(row, col, "/Imagenes/TPOOBplanta.png");
         }
     }

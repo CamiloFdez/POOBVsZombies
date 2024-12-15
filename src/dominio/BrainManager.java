@@ -4,18 +4,18 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class brainManager {
-    private static brainManager instance;
+public class BrainManager {
+    private static BrainManager instance;
     private int totalBrainPoints = 50;
     private JLabel brainCounterLabel;
     private Timer brainTimer;
 
-    public brainManager() {
+    public BrainManager() {
         startsBrainTimer();
     }
-    public static brainManager getInstance() {
+    public static BrainManager getInstance() {
         if (instance == null) {
-            instance = new brainManager();
+            instance = new BrainManager();
         }
         return instance;
     }

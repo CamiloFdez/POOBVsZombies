@@ -14,7 +14,6 @@ import java.util.List;
 
 
 public class POOBvsZombiesChoosePlants extends JFrame {
-    private JLabel Menu;
     private Clip musicClip;
     private JButton playButton;
     private JButton menuButton;

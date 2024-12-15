@@ -178,24 +178,6 @@ public class Tablero {
     }
 
     /**
-     * Devuelve una representación visual del tablero para depuración.
-     */
-    public void imprimirTablero() {
-        for (int i = 0; i < filas; i++) {
-            for (int j = 0; j < columnas; j++) {
-                if (celdas[i][j] == null) {
-                    System.out.print("[ ]");
-                } else if (celdas[i][j] instanceof Planta) {
-                    System.out.print("[P]");
-                } else if (celdas[i][j] instanceof Zombie) {
-                    System.out.print("[Z]");
-                }
-            }
-            System.out.println();
-        }
-    }
-
-    /**
      * Verifica si hay al menos un zombi en el tablero.
      * @return true si hay zombis en el tablero, false si no hay zombis.
      */

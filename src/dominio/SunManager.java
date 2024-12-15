@@ -3,7 +3,7 @@ package dominio;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class SunManager {
+public final class SunManager {
     private static SunManager instance;
     private int totalSunPoints = 50;
     private JLabel sunCounterLabel;

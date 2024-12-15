@@ -1,23 +1,23 @@
 package test;
 
-import dominio.brainManager;
+import dominio.BrainManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import javax.swing.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BrainManagerTest {
-    private brainManager brainManager;
+    private BrainManager brainManager;
 
     @BeforeEach
     public void setUp() {
-        brainManager = new brainManager();
+        brainManager = new BrainManager();
     }
 
     @Test
     public void testSingletonInstance() {
-        brainManager firstInstance = brainManager.getInstance();
-        brainManager secondInstance = brainManager.getInstance();
+        BrainManager firstInstance = brainManager.getInstance();
+        BrainManager secondInstance = brainManager.getInstance();
         assertSame(firstInstance, secondInstance, "El método getInstance no retorna la misma instancia");
     }
 

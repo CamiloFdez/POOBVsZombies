@@ -46,11 +46,11 @@ public class POOBvsZombiesGUI extends JFrame {
         setContentPane(contentPane);
 
         // Imagen de fondo
-        JLabel BackImageLabel = new JLabel();
-        ImageIcon MenuBackground = new ImageIcon(getClass().getResource("/Imagenes/MENU.png")); // R    uta relativa
-        BackImageLabel.setIcon(MenuBackground);
-        BackImageLabel.setHorizontalAlignment(SwingConstants.CENTER); // Centrar la imagen
-        contentPane.add(BackImageLabel, BorderLayout.CENTER);
+        JLabel backImageLabel = new JLabel();
+        ImageIcon menuBackground = new ImageIcon(getClass().getResource("/Imagenes/MENU.png")); // R    uta relativa
+        backImageLabel.setIcon(menuBackground);
+        backImageLabel.setHorizontalAlignment(SwingConstants.CENTER); // Centrar la imagen
+        contentPane.add(backImageLabel, BorderLayout.CENTER);
 
         // Imagen superior
         ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/Menu_proyecto.png"));

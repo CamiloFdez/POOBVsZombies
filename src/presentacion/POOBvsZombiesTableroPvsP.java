@@ -64,7 +64,7 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
         brainCounterLabel.setForeground(new Color(255, 255, 255));
         brainCounterLabel.setFont(new Font("Serif", Font.BOLD, 25));
         brainCounterLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        brainManager.getInstance().setBrainCounterLabel(brainCounterLabel);
+        BrainManager.getInstance().setBrainCounterLabel(brainCounterLabel);
 
         prepareElements();
         prepareActions();
@@ -192,10 +192,10 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
         accionesDisponibles.put("POOBPlanta", new ColocarECIPlant(tableroDominio));
         accionesDisponibles.put("Acción 6", new ShovelAction(tableroDominio));
         accionesDisponibles.put("evolve", new EvolutionAction(tableroDominio));
-        accionesDisponibles.put("zombie", new zombieAction(tableroDominio));
-        accionesDisponibles.put("zombieCono", new zombieConoAction(tableroDominio));
-        accionesDisponibles.put("zombieBalde", new zombieBaldeAction(tableroDominio));
-        accionesDisponibles.put("POOBZombie1", new zombieBrainsteinAction(tableroDominio));
+        accionesDisponibles.put("zombie", new ZombieAction(tableroDominio));
+        accionesDisponibles.put("zombieCono", new ZombieConoAction(tableroDominio));
+        accionesDisponibles.put("zombieBalde", new ZombieBaldeAction(tableroDominio));
+        accionesDisponibles.put("POOBZombie1", new ZombieBrainsteinAction(tableroDominio));
         accionesDisponibles.put("POOBZombie2", new ECIZombieAction(tableroDominio));
     }
 
@@ -312,9 +312,9 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
         }
         @Override
         public void execute(int row, int col) {
-            ECIPlant ECIPlant = new ECIPlant();
-            ECIPlant.performAction();
-            tableroDominio.colocarPlanta(ECIPlant, row, col);
+            ECIPlant eCIPlant = new ECIPlant();
+            eCIPlant.performAction();
+            tableroDominio.colocarPlanta(eCIPlant, row, col);
             colocarPlantaVisual(row, col, "/Imagenes/TPOOBplanta.png");
         }
     }
@@ -338,10 +338,10 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
         }
     }
 
-    class zombieAction implements Action {
+    class ZombieAction implements Action {
         private Tablero tableroDominio;
 
-        public zombieAction(Tablero tablero) {
+        public ZombieAction(Tablero tablero) {
             this.tableroDominio = tablero;
         }
         @Override
@@ -353,9 +353,9 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
         }
     }
 
-    class zombieConoAction implements Action {
+    class ZombieConoAction implements Action {
         private Tablero tableroDominio;
-        public zombieConoAction(Tablero tablero) {
+        public ZombieConoAction(Tablero tablero) {
             this.tableroDominio = tablero;
         }
         @Override
@@ -367,30 +367,30 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
         }
     }
 
-    class zombieBaldeAction implements Action {
+    class ZombieBaldeAction implements Action {
         private Tablero tableroDominio;
-        public zombieBaldeAction(Tablero tablero) {
+        public ZombieBaldeAction(Tablero tablero) {
             this.tableroDominio = tablero;
         }
         @Override
         public void execute(int row, int col) {
-            ZombieCubeta ZombieBalde = new ZombieCubeta();
-            ZombieBalde.move();
-            tableroDominio.colocarZombie(ZombieBalde, row, 8);
+            ZombieCubeta zombieBalde = new ZombieCubeta();
+            zombieBalde.move();
+            tableroDominio.colocarZombie(zombieBalde, row, 8);
             colocarPlantaVisual(row, 8, "/Imagenes/TzombieB.png");
         }
     }
 
-    class zombieBrainsteinAction implements Action {
+    class ZombieBrainsteinAction implements Action {
         private Tablero tableroDominio;
-        public zombieBrainsteinAction(Tablero tablero) {
+        public ZombieBrainsteinAction(Tablero tablero) {
             this.tableroDominio = tablero;
         }
         @Override
         public void execute(int row, int col) {
-            Brainstein Brainstein = new Brainstein();
-            Brainstein.performPassiveAction();
-            tableroDominio.colocarZombie(Brainstein, row, 8);
+            Brainstein brainstein = new Brainstein();
+            brainstein.performPassiveAction();
+            tableroDominio.colocarZombie(brainstein, row, 8);
             colocarPlantaVisual(row, 8, "/Imagenes/TPOOBZombie1.png");
         }
     }
