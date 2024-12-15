@@ -10,7 +10,7 @@ public class brainManager {
     private JLabel brainCounterLabel;
     private Timer brainTimer;
 
-    private brainManager() {
+    public brainManager() {
         startsBrainTimer();
     }
     public static brainManager getInstance() {
@@ -61,6 +61,10 @@ public class brainManager {
         if (brainCounterLabel != null) {
             brainCounterLabel.setText(totalBrainPoints + "");
         }
+    }
+
+    public int getTotalGetPoints(){
+        return totalBrainPoints;
     }
 }
 

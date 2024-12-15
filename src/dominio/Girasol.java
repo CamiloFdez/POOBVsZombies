@@ -30,6 +30,7 @@ public class Girasol extends PlantaPasiva {
         }, 0, 20000);
     }
 
+
     /**
      * Genera 25 soles y acumula la cantidad generada.
      */

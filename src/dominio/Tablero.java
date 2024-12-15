@@ -149,6 +149,10 @@ public class Tablero {
         return esPosicionValida(fila, columna) && celdas[fila][columna] instanceof Planta;
     }
 
+    public boolean isZombieAt(int fila, int columna){
+        return esPosicionValida(fila, columna) && celdas[fila][columna] instanceof Zombie;
+    }
+
     /**
      * Elimina la entidad en la posición especificada del tablero.
      *
@@ -189,5 +193,20 @@ public class Tablero {
             }
             System.out.println();
         }
+    }
+
+    /**
+     * Verifica si hay al menos un zombi en el tablero.
+     * @return true si hay zombis en el tablero, false si no hay zombis.
+     */
+    public boolean tieneZombies() {
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                if (celdas[i][j] instanceof Zombie) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

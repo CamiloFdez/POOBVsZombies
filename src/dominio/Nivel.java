@@ -1,5 +1,6 @@
 package dominio;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +25,7 @@ public class Nivel {
         this.jugadorPlantas = jugadorPlantas;
         this.jugadorZombis = jugadorZombis;
         this.tiempoRestante = tiempoRestante;
+        this.zombisEnCola = new ArrayList<>();
     }
 
     /**
@@ -31,7 +33,7 @@ public class Nivel {
      */
     public void actualizarNivel() {
         tiempoRestante--;
-        if (tiempoRestante % 10 == 0 && !zombisEnCola.isEmpty()) {
+        if (tiempoRestante % 10 == 0 && zombisEnCola != null && !zombisEnCola.isEmpty()) {
             Zombie zombie = zombisEnCola.remove(0);
             tablero.colocarZombie(zombie, 4, 8);
         }
@@ -42,7 +44,7 @@ public class Nivel {
      * @return true si el jugador ha ganado, false de lo contrario.
      */
     public boolean verificarVictoria() {
-        return zombisEnCola.isEmpty() && !hayZombisEnTablero();
+        return (zombisEnCola == null || zombisEnCola.isEmpty()) && !hayZombisEnTablero();
     }
 
     /**
@@ -58,7 +60,7 @@ public class Nivel {
      * @return siempre false en la implementación actual.
      */
     private boolean hayZombisEnTablero() {
-        return false;
+        return tablero.tieneZombies();
     }
 
     /**
@@ -67,5 +69,9 @@ public class Nivel {
      */
     private boolean zombisLleganALaCasa() {
         return false;
+    }
+
+    public int getTiempoRestante(){
+        return tiempoRestante;
     }
 }
