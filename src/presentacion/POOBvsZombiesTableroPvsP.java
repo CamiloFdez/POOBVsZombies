@@ -432,7 +432,7 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
                         if (nivelEvolucion <= 3) {
                             actualizarPlantaVisual(row, col, nuevaImagen);
                             if (nivelEvolucion == 2) {
-                                evolutionTimer.setDelay(20000);
+                                evolutionTimer.setDelay(20000); // Delay de 20 segundos
                             }
                         } else {
                             evolutionTimer.stop();
@@ -446,6 +446,7 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
             }
         }
     }
+
 
     /**
      * Metodo que se encarga de actualizar la imagen de la planta en el tablero en caso de que evolucione
@@ -670,7 +671,6 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
             if (imageUrl != null) {
                 ImageIcon originalIcon = new ImageIcon(imageUrl);
 
-                // Escalar la imagen al tamaño deseado (ejemplo: 70x70 píxeles)
                 int buttonSize = 67;
                 Image scaledImage = originalIcon.getImage().getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH);
                 ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -702,7 +702,10 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
         }
     }
 
-    // Alternar música según el estado del JCheckBox
+    /**
+     * Metodo para parar o poner musica segun el estado del checkBox
+     * @param playMusic
+     */
     public void toggleMusic(boolean playMusic) {
         if (playMusic) {
             playBackgroundMusic("/musica/musicaTablero.wav");
@@ -734,7 +737,7 @@ public class POOBvsZombiesTableroPvsP extends JFrame {
     private Clip clip;
 
     /**
-     * Metodo para poner musica de fondox
+     * Metodo para poner musica de fondo
      * @param resourcePath
      */
     public void playBackgroundMusic(String resourcePath) {

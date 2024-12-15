@@ -24,7 +24,7 @@ public class ECIEvolutionTest {
         assertEquals(0, eciEvolution.getDamage(), "La planta debería iniciar con 0 de daño.");
 
         // Esperar a que evolucione a la segunda fase (15 segundos)
-        Thread.sleep(15000);
+        Thread.sleep(16000);
         assertEquals(3, eciEvolution.getShootInterval(), "La planta debería atacar cada 3 segundos");
         assertEquals(70, eciEvolution.getDamage(), "La planta debería hacer 70 de daño en la fase 2.");
     }
