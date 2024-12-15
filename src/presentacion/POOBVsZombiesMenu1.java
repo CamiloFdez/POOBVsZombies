@@ -120,9 +120,5 @@ public class POOBVsZombiesMenu1 extends JFrame {
         POOBvsZombiesGUI a = new POOBvsZombiesGUI();
         a.setVisible(true);
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(POOBVsZombiesMenu1::new);
-    }
 }
 

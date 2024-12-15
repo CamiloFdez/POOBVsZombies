@@ -340,12 +340,4 @@ public class POOBvsZombiesGUI extends JFrame {
 
         panel.add(button);
     }
-
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            POOBvsZombiesGUI gui = new POOBvsZombiesGUI();
-            gui.setVisible(true);
-        });
-    }
 }
