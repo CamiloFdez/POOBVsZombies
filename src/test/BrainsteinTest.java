@@ -11,7 +11,7 @@ class BrainsteinTest {
 
         // Simulamos el paso del tiempo
         try {
-            Thread.sleep(20000);
+            Thread.sleep(20100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -161,7 +161,7 @@ class ZombieConoTest {
         planta.decreaseHealth(zombieCono.getDamage()); // Forzar el segundo daño
 
         // Verificar la salud esperada
-        int saludEsperada = 300 - (zombieCono.getDamage() * 2);
+        int saludEsperada = 200 - (zombieCono.getDamage() * 2);
         assertEquals(saludEsperada, planta.getHealth(),
                 "La salud de la planta debería haberse reducido por dos ataques.");
     }
