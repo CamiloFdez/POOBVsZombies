@@ -3,6 +3,8 @@ package test;
 import static org.junit.jupiter.api.Assertions.*;
 import dominio.*;
 
+import java.util.ArrayList;
+
 class TableroTest {
     @org.junit.jupiter.api.Test
     void testColocarPlanta() {
@@ -70,6 +72,31 @@ class TableroTest {
         // Recoger soles
         tablero.recogerSoles();
         assertEquals(75, tablero.getSolesRecogidos(), "El tablero debería haber recogido 75 soles (50 ECI + 25 Girasol)");
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testLawnMowerEliminaZombies() {
+        Tablero tablero = new Tablero(5, 5);
+        LawnMower lawnMower = new LawnMower(2); // Podadora en la fila 2
+        ZombieBasico zombie = new ZombieBasico();
+
+        // Colocar zombi en la fila 2, columna 0
+        tablero.colocarZombie(zombie, 2, 0);
+
+        // Activar la podadora en la fila 2
+        tablero.activarLawnMower(2);
+
+        // Verificar que la celda esté vacía
+        assertTrue(tablero.isEmpty(2, 0), "La celda debería estar vacía tras la activación de la Lawn Mower.");
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testLawnMowerNoReutilizable() {
+        LawnMower lawnMower = new LawnMower(1);
+        lawnMower.activate(new ArrayList<>()); // Activar la podadora
+
+        // Verificar que no se pueda volver a usar
+        assertFalse(lawnMower.isUsable(), "La Lawn Mower no debería ser reutilizable tras activarse.");
     }
 
 }

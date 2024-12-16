@@ -94,7 +94,7 @@ public class Tablero {
      *
      * @param fila Fila donde se activará la podadora.
      */
-    private void activarLawnMower(int fila) {
+    public void activarLawnMower(int fila) {
         LawnMower lawnMower = lawnMowers.get(fila);
         if (lawnMower.isAvailable()) {
             List<Zombie> zombiesEnFila = obtenerZombiesEnFila(fila);
@@ -190,5 +190,15 @@ public class Tablero {
             }
         }
         return false;
+    }
+
+    /**
+     * Verifica si una celda específica está vacía.
+     * @param fila Fila de la celda.
+     * @param columna Columna de la celda.
+     * @return true si la celda está vacía, false de lo contrario.
+     */
+    public boolean isEmpty(int fila, int columna) {
+        return esPosicionValida(fila, columna) && celdas[fila][columna] == null;
     }
 }

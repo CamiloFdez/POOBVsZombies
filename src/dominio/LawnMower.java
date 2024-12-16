@@ -66,4 +66,12 @@ public class LawnMower {
     public boolean isAvailable() {
         return available;
     }
+
+    /**
+     * Verifica si la podadora puede ser usada nuevamente.
+     * @return true si está disponible, false en caso contrario.
+     */
+    public boolean isUsable() {
+        return available;
+    }
 }
