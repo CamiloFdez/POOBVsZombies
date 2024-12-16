@@ -145,11 +145,11 @@ public class POOBvsZombiesGUI extends JFrame {
                     tablero.setVisible(true);
                 } else if (selectedButton.getActionCommand().equals("PvsM")) {
                     // Acción para "PvsM"
-                    String[] options = {"Fácil", "Normal", "Difícil"};
+                    String[] options = {"ZombiesOriginal", "ZombiesStrategic"};
                     int choice = JOptionPane.showOptionDialog(
                             null,
-                            "Selecciona la dificultad:",
-                            "Dificultad",
+                            "Selecciona el tipo:",
+                            "Tipo",
                             JOptionPane.DEFAULT_OPTION,
                             JOptionPane.QUESTION_MESSAGE,
                             null,
