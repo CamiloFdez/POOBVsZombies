@@ -30,15 +30,21 @@ public class ZombieCono extends Zombie {
     @Override
     public void decreaseHealth(int amount) {
         if (vidaCono > 0) {
+            int dañoRestante = amount - vidaCono; // Calcula cuánto daño sobra después del cono
             vidaCono -= amount;
-            if (vidaCono < 0) {
-                super.decreaseHealth(-vidaCono); // El exceso de daño se aplica a la salud básica
-                vidaCono = 0;
+
+            if (vidaCono <= 0) {
+                vidaCono = 0; // El cono se destruye
+                if (dañoRestante > 0) {
+                    super.decreaseHealth(dañoRestante); // Aplica el exceso a la salud básica
+                }
             }
         } else {
-            super.decreaseHealth(amount); // Daño directo a la salud básica
+            super.decreaseHealth(amount); // Daño directo a la salud básica si no hay cono
         }
     }
+
+
 
     /**
      * Verifica si el zombi tiene el cono en su cabeza.

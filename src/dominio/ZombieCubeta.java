@@ -30,15 +30,20 @@ public class ZombieCubeta extends Zombie {
     @Override
     public void decreaseHealth(int amount) {
         if (vidaCubeta > 0) {
+            int dañoRestante = amount - vidaCubeta; // Calcula el daño sobrante
             vidaCubeta -= amount;
-            if (vidaCubeta < 0) {
-                super.decreaseHealth(-vidaCubeta); // El exceso de daño pasa a la salud básica
-                vidaCubeta = 0;
+
+            if (vidaCubeta <= 0) {
+                vidaCubeta = 0; // La cubeta se destruye
+                if (dañoRestante > 0) {
+                    super.decreaseHealth(dañoRestante); // Aplica el daño sobrante a la salud básica
+                }
             }
         } else {
-            super.decreaseHealth(amount); // Daño directo a la salud básica
+            super.decreaseHealth(amount); // Si la cubeta ya no está, el daño va a la salud básica
         }
     }
+
 
     /**
      * Verifica si el zombi tiene la cubeta en su cabeza.

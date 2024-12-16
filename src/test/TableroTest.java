@@ -71,6 +71,7 @@ class TableroTest {
         tablero.recogerSoles();
         assertEquals(75, tablero.getSolesRecogidos(), "El tablero debería haber recogido 75 soles (50 ECI + 25 Girasol)");
     }
+
 }
 
 

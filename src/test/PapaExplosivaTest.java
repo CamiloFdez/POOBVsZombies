@@ -3,8 +3,10 @@ package test;
 import static org.junit.jupiter.api.Assertions.*;
 import dominio.*;
 
+import org.junit.jupiter.api.Test;
+
 class PapaExplosivaTest {
-    @org.junit.jupiter.api.Test
+    @Test
     void testExplosiónPapaExplosiva() {
         PapaExplosiva papaExplosiva = new PapaExplosiva();
         ZombieBasico zombie = new ZombieBasico();
@@ -20,6 +22,25 @@ class PapaExplosivaTest {
         assertEquals(0, zombie.getHealth(), "El zombi debería haber sido destruido completamente por la explosión");
         assertFalse(papaExplosiva.isAlive(), "La papa explosiva debería destruirse al explotar");
     }
-    
+
+    @Test
+    public void testPapaExplosivaExplosion() {
+        PapaExplosiva papa = new PapaExplosiva();
+        ZombieBasico zombie = new ZombieBasico(); // Zombie con salud inicial 150
+
+        for (int i = 0; i < 14; i++) {
+            papa.disminuirTiempoActivacion();
+        }
+
+        papa.explotar(zombie);
+        assertEquals(0, zombie.getHealth(), "La Papa Explosiva debería eliminar al zombie al explotar.");
+        assertTrue(papa.hasExploded(), "La Papa Explosiva debe marcarse como explotada.");
+    }
+
+    @Test
+    public void testPapaExplosivaNoExplota() {
+        PapaExplosiva papa = new PapaExplosiva();
+        assertFalse(papa.hasExploded(), "La Papa Explosiva no debería explotar al colocarse inicialmente.");
+    }
 }
 

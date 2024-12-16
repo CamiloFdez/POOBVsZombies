@@ -16,6 +16,7 @@ public class ZombieBasico extends Zombie {
         super("Zombie Básico", 100, 100, 0.5);
     }
 
+
     /**
      * Hace que el zombi avance en línea recta hacia las plantas.
      */
