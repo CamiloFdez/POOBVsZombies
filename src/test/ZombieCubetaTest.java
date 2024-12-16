@@ -2,6 +2,8 @@ package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import dominio.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 class ZombieCubetaTest {
     @org.junit.jupiter.api.Test
@@ -60,5 +62,53 @@ class ZombieCubetaTest {
         assertFalse(zombieCubeta.hasCubeta(), "El zombie debería perder la cubeta.");
         assertEquals(0, zombieCubeta.getHealth(), "El zombie debería ser destruido tras recibir daño total.");
     }
+
+    @org.junit.jupiter.api.Test
+    public void testZombieCubetaGetCosto() {
+        ZombieCubeta zombieCubeta = new ZombieCubeta();
+        int costoEsperado = 200; // Según el valor definido en la clase ZombieCubeta
+        assertEquals(costoEsperado, zombieCubeta.getCosto(), "El costo del ZombieCubeta debería ser 200.");
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testZombieCubetaMove() {
+        ZombieCubeta zombieCubeta = new ZombieCubeta();
+
+        // Captura la salida estándar
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        zombieCubeta.move();
+
+        // Restaura la salida estándar
+        System.setOut(System.out);
+
+        // Elimina espacios y saltos de línea innecesarios
+        String salidaReal = outContent.toString().trim();
+        String mensajeEsperado = zombieCubeta.getName() + " avanza en línea recta hacia las plantas.";
+
+        assertEquals(mensajeEsperado, salidaReal, "El método move debería imprimir el mensaje correcto.");
+    }
+
+
+    @org.junit.jupiter.api.Test
+    public void testZombieCubetaAttack() throws InterruptedException {
+        ZombieCubeta zombieCubeta = new ZombieCubeta();
+        Planta planta = new Planta("Planta Básica", 200) {
+            @Override
+            public void performAction() {
+
+            }
+        }; // Planta con salud inicial de 200
+
+        zombieCubeta.attack(planta);
+
+        // Esperar lo suficiente para dos ataques (suponiendo que el intervalo es de 0.5 segundos)
+        Thread.sleep(1100);
+
+        int saludEsperada = 200 - (2 * zombieCubeta.getDamage()); // 2 ataques de 100 de daño cada uno
+        assertEquals(saludEsperada, planta.getHealth(), "La salud de la planta debería reducirse por dos ataques consecutivos.");
+    }
+
 }
 

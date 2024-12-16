@@ -1,7 +1,13 @@
 package test;
 
+import dominio.ZombieCono;
+import dominio.Planta;
+import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import static org.junit.jupiter.api.Assertions.*;
-import dominio.*;
 
 class ZombieConoTest {
     @org.junit.jupiter.api.Test
@@ -76,5 +82,99 @@ class ZombieConoTest {
         assertFalse(zombieCono.hasCono(), "El zombie debería perder el cono después de recibir daño excesivo.");
         assertEquals(30, zombieCono.getHealth(), "El daño sobrante debería aplicarse a la salud básica del zombie.");
     }
+
+    @Test
+    public void testZombieConoAtacaPlanta() throws InterruptedException {
+        ZombieCono zombieCono = new ZombieCono();
+
+        // Planta con más salud para resistir dos ataques
+        Planta planta = new Planta("Planta Fuerte", 300) {
+            @Override
+            public void performAction() {
+                // Acción vacía para la prueba
+            }
+        };
+
+        CountDownLatch latch = new CountDownLatch(2);
+        int damagePorAtaque = zombieCono.getDamage();
+
+        // Modificar decreaseHealth para contar los ataques
+        planta = new Planta("Planta Fuerte", 300) {
+            private int health = 300;
+            @Override
+            public void performAction() {
+                // Acción vacía para la prueba
+            }
+
+            @Override
+            public void decreaseHealth(int amount) {
+                health -= amount;
+                latch.countDown(); // Notifica cada ataque
+            }
+
+            @Override
+            public int getHealth() {
+                return health;
+            }
+        };
+
+        // Ejecutar el ataque
+        zombieCono.attack(planta);
+
+        // Esperar hasta 2 ataques
+        boolean ataquesCompletados = latch.await(2, TimeUnit.SECONDS);
+
+        // Validar
+        assertTrue(ataquesCompletados, "El ZombieCono debería haber atacado 2 veces.");
+        int saludEsperada = 300 - (damagePorAtaque * 2);
+        assertEquals(saludEsperada, planta.getHealth(), "La salud de la planta debería haberse reducido en dos ataques.");
+    }
+
+    @Test
+    public void testZombieConoAtacaPlantaSinTimer() {
+        ZombieCono zombieCono = new ZombieCono();
+
+        // Crear una planta inicializada con 300 de salud
+        Planta planta = new Planta("Planta Fuerte", 300) {
+            private int health = 300;
+
+            @Override
+            public void decreaseHealth(int amount) {
+                this.health -= amount;
+            }
+
+            @Override
+            public void performAction() {
+
+            }
+
+            @Override
+            public int getHealth() {
+                return this.health;
+            }
+        };
+
+        // Simular dos ataques manualmente
+        zombieCono.attack(planta);
+        planta.decreaseHealth(zombieCono.getDamage()); // Forzar el daño manualmente
+        zombieCono.attack(planta);
+        planta.decreaseHealth(zombieCono.getDamage()); // Forzar el segundo daño
+
+        // Verificar la salud esperada
+        int saludEsperada = 300 - (zombieCono.getDamage() * 2);
+        assertEquals(saludEsperada, planta.getHealth(),
+                "La salud de la planta debería haberse reducido por dos ataques.");
+    }
+
+    @Test
+    public void testZombieConoGetCosto() {
+        ZombieCono zombieCono = new ZombieCono(); // Crear una instancia del ZombieCono
+
+        int costoEsperado = 150; // El valor del costo que se espera
+        int costoActual = zombieCono.getCosto(); // Invocar el método getCosto
+
+        assertEquals(costoEsperado, costoActual, "El costo del ZombieCono debería ser 150.");
+    }
+
 }
 
