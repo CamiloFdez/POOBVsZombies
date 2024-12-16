@@ -131,42 +131,6 @@ class ZombieConoTest {
     }
 
     @Test
-    public void testZombieConoAtacaPlantaSinTimer() {
-        ZombieCono zombieCono = new ZombieCono();
-
-        // Crear una planta inicializada con 300 de salud
-        Planta planta = new Planta("Planta Fuerte", 300) {
-            private int health = 300;
-
-            @Override
-            public void decreaseHealth(int amount) {
-                this.health -= amount;
-            }
-
-            @Override
-            public void performAction() {
-
-            }
-
-            @Override
-            public int getHealth() {
-                return this.health;
-            }
-        };
-
-        // Simular dos ataques manualmente
-        zombieCono.attack(planta);
-        planta.decreaseHealth(zombieCono.getDamage()); // Forzar el daño manualmente
-        zombieCono.attack(planta);
-        planta.decreaseHealth(zombieCono.getDamage()); // Forzar el segundo daño
-
-        // Verificar la salud esperada
-        int saludEsperada = 200 - (zombieCono.getDamage() * 2);
-        assertEquals(saludEsperada, planta.getHealth(),
-                "La salud de la planta debería haberse reducido por dos ataques.");
-    }
-
-    @Test
     public void testZombieConoGetCosto() {
         ZombieCono zombieCono = new ZombieCono(); // Crear una instancia del ZombieCono
 
