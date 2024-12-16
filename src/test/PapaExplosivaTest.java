@@ -42,5 +42,30 @@ class PapaExplosivaTest {
         PapaExplosiva papa = new PapaExplosiva();
         assertFalse(papa.hasExploded(), "La Papa Explosiva no debería explotar al colocarse inicialmente.");
     }
+
+    @Test
+    public void testPapaExplosivaNoActiva() {
+        PapaExplosiva papa = new PapaExplosiva();
+
+        assertFalse(papa.isActiva(), "La papa no debería estar activa inicialmente.");
+        assertTrue(papa.isAlive(), "La papa debería estar viva inicialmente.");
+    }
+
+    @Test
+    public void testPapaExplosivaExplotaCorrectamente() {
+        PapaExplosiva papa = new PapaExplosiva();
+        ZombieBasico zombie = new ZombieBasico();
+
+        // Activar la papa
+        for (int i = 0; i < 14; i++) {
+            papa.performAction();
+        }
+
+        assertTrue(papa.isActiva(), "La papa debería estar activa después de 14 acciones.");
+        papa.explotar(zombie);
+
+        assertEquals(0, zombie.getHealth(), "El zombi debería ser destruido por la explosión.");
+        assertFalse(papa.isAlive(), "La papa debería destruirse tras explotar.");
+    }
 }
 

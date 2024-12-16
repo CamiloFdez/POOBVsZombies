@@ -39,5 +39,26 @@ class ZombieCubetaTest {
         assertEquals(0, zombie.getHealth(), "Zombie Cubeta debería quedar sin salud después del daño sobrante.");
     }
 
+    @org.junit.jupiter.api.Test
+    public void testZombieCubetaPierdeCubeta() {
+        ZombieCubeta zombieCubeta = new ZombieCubeta();
+
+        // Infligir daño hasta que pierda la cubeta
+        zombieCubeta.decreaseHealth(700);
+
+        assertFalse(zombieCubeta.hasCubeta(), "El zombie debería perder la cubeta después de recibir 700 de daño.");
+        assertEquals(100, zombieCubeta.getHealth(), "La salud básica del zombie debería permanecer intacta después de perder la cubeta.");
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testZombieCubetaDañoExcesivo() {
+        ZombieCubeta zombieCubeta = new ZombieCubeta();
+
+        // Infligir daño total, incluyendo el daño básico
+        zombieCubeta.decreaseHealth(850);
+
+        assertFalse(zombieCubeta.hasCubeta(), "El zombie debería perder la cubeta.");
+        assertEquals(0, zombieCubeta.getHealth(), "El zombie debería ser destruido tras recibir daño total.");
+    }
 }
 

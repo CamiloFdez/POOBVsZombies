@@ -54,5 +54,27 @@ class ZombieConoTest {
         assertEquals(0, zombieCono.getHealth(), "La salud del zombi debería ser 0 después de recibir daño directo.");
         assertFalse(zombieCono.isAlive(), "El zombi debería estar muerto.");
     }
+
+    @org.junit.jupiter.api.Test
+    public void testZombieConoSinCono() {
+        ZombieCono zombieCono = new ZombieCono();
+
+        // Infligir daño suficiente para quitar el cono
+        zombieCono.decreaseHealth(280);
+
+        assertFalse(zombieCono.hasCono(), "El zombie debería perder el cono después de recibir 280 de daño.");
+        assertEquals(100, zombieCono.getHealth(), "La salud básica del zombie debería permanecer intacta después de perder el cono.");
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testZombieConoRecibeDañoExcesivo() {
+        ZombieCono zombieCono = new ZombieCono();
+
+        // Infligir daño que exceda la vida del cono
+        zombieCono.decreaseHealth(350);
+
+        assertFalse(zombieCono.hasCono(), "El zombie debería perder el cono después de recibir daño excesivo.");
+        assertEquals(30, zombieCono.getHealth(), "El daño sobrante debería aplicarse a la salud básica del zombie.");
+    }
 }
 

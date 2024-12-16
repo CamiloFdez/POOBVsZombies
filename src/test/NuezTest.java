@@ -22,4 +22,21 @@ class NuezTest {
         assertTrue(nuez.getHealth() < 4000, "La salud de la Nuez debería disminuir después del ataque del zombi");
         assertTrue(nuez.isAlive(), "La Nuez debería seguir viva después de un solo ataque");
     }
+
+    @org.junit.jupiter.api.Test
+    public void testNuezRecibeDaño() {
+        Nuez nuez = new Nuez();
+
+        nuez.decreaseHealth(100);
+        assertEquals(3900, nuez.getHealth(), "La salud de la nuez debería disminuir a 3900 después de recibir 100 de daño.");
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testNuezEsDestruida() {
+        Nuez nuez = new Nuez();
+
+        nuez.decreaseHealth(4000);
+        assertEquals(0, nuez.getHealth(), "La salud de la nuez debería ser 0 después de recibir daño total.");
+        assertFalse(nuez.isAlive(), "La nuez debería estar destruida.");
+    }
 }
