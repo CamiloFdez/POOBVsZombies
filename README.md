@@ -17,12 +17,17 @@ Analyze code quality using PMD static analysis.
 Develop a maintainable and scalable codebase using Java and Swing for the GUI.
 
 # 🧩 Project Structure
+El proyecto esta estructurado de esta manera:
+```text
 src/
- ┣ 📂 domain/        → Core game logic (plants, zombies, player, level, board, etc.)
- ┣ 📂 presentation/  → Graphical interface built with Java Swing
- ┣ 📂 music/         → Sound and music management
- ┣ 📂 utils/         → Utility classes and helpers
- ┗ 📜 Main.java      → Entry point of the game
+
+├──📂 domain/        → Core game logic (plants, zombies, player, level, board, etc.)
+├──📂 presentation/  → Graphical interface built with Java Swing
+├──📂 music/         → Sound and music management
+├──📂 utils/         → Utility classes and helpers
+├──📜 Main.java      → Entry point of the game       
+├── README.md
+```
  
 # 🔍 Code Analysis
 
